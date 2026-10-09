@@ -3,8 +3,9 @@ import { Redis } from "@upstash/redis";
 
 // Upstash Redis が未設定の場合（ローカル開発等）はインメモリフォールバック
 function createLimiters() {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  // 手動設定の名前に加え、Vercel Marketplace 連携（プレフィックス UPSTASH_REDIS）が作る名前も読む
+  const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.UPSTASH_REDIS_KV_REST_API_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.UPSTASH_REDIS_KV_REST_API_TOKEN;
 
   if (!url || !token) {
     return null;
