@@ -12,7 +12,7 @@
 | 本番URL | https://rirekito.vercel.app |
 | リポジトリ | https://github.com/naot0205-design/rirekito |
 | 運営者 | 土元 直（nao.t19970205@gmail.com） |
-| コンセプト | 事務職転職希望の第二新卒女性向け、スマホ完結の履歴書作成ツール |
+| コンセプト | 営業職転職希望者向け、スマホ完結の履歴書作成ツール「リレキト for 営業職」 |
 
 ### ビジネスモデル
 
@@ -63,7 +63,10 @@ src/
 │       ├── Step3Result.tsx       # 診断結果＋求人表示
 │       └── Step4Resume.tsx       # 履歴書プレビュー＋自己PR
 ├── data/
-│   └── types.ts                  # 診断タイプ定義・求人データ
+│   ├── site.ts                   # ブランド名・文言・提携先名（SITE, PARTNER_READY）
+│   ├── types.ts                  # 診断タイプ定義
+│   ├── questions.ts / scoring.ts # 診断の質問・配点
+│   └── jobs.ts                   # 求人例データ
 ├── lib/
 │   ├── supabase.ts               # Supabase admin クライアント（サーバー専用）
 │   └── rate-limit.ts             # レート制限（インメモリ）
@@ -80,10 +83,10 @@ Step1 基本情報入力
   └─ 氏名・生年月日・住所・電話番号（必須）・メアド（必須）・学歴・職歴 等
 
 Step2 自己診断
-  └─ 10問・三択（A/B/C）→ ルールベースで6タイプに分類
+  └─ 10問・三択（A/B/C）→ ルールベースで6タイプ（信頼ビルダー等）に分類
 
 Step3 診断結果
-  └─ タイプ表示（段取りマスター等）＋関連求人3件表示（ダミーデータ）
+  └─ タイプ表示（信頼ビルダー等）＋求人例3件表示（イメージ用ダミー。提携先が確定するまで送客案内は非表示）
 
 Step4 履歴書プレビュー
   └─ 自己PRテンプレート表示
@@ -137,7 +140,7 @@ CREATE TABLE resumes (
   "consentPartnerReferral": false,
   "consentMarketing": false,
   "resumeData": { /* BasicInfo */ },
-  "diagnosisType": "段取りマスター"
+  "diagnosisType": "信頼ビルダー"
 }
 ```
 
@@ -156,7 +159,7 @@ CREATE TABLE resumes (
 ```json
 {
   "userStrengths": "前職でExcelを使った請求書処理...",
-  "staffType": "段取りマスター"
+  "staffType": "信頼ビルダー"
 }
 ```
 
@@ -213,6 +216,8 @@ cp .env.local.example .env.local
 
 npm run dev
 # → http://localhost:3000
+
+npm test    # vitest（診断ロジック・SITE/PARTNER_READY）
 ```
 
 本番デプロイは `main` ブランチへの push で Vercel が自動実行。
