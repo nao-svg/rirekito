@@ -1,10 +1,14 @@
-export type StaffType =
-  | "段取りマスター"
-  | "数字の番人"
-  | "ハブ人材"
-  | "ルール守護者"
-  | "ウェルカムマスター"
-  | "インフォキュレーター";
+// 診断タイプ名の唯一の定義元。並び順は同点時の決め方にも使う
+export const STAFF_TYPE_NAMES = [
+  "信頼ビルダー",
+  "開拓ハンター",
+  "課題ソルバー",
+  "数字ストラテジスト",
+  "寄り添いカウンセラー",
+  "チーム推進エンジン",
+] as const;
+
+export type StaffType = (typeof STAFF_TYPE_NAMES)[number];
 
 export interface BasicInfo {
   name: string;
