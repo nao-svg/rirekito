@@ -5,6 +5,7 @@ import { DiagnosisAnswer, DiagnosisResult, StaffType } from "@/types";
 import { STAFF_TYPES } from "@/data/types";
 import { JOBS_BY_TYPE } from "@/data/jobs";
 import { calcDiagnosis } from "@/data/scoring";
+import { SITE } from "@/data/site";
 
 interface Props {
   answers: DiagnosisAnswer[];
@@ -102,7 +103,7 @@ export default function Step3Result({ answers, onNext, onBack }: Props) {
 
       {/* 向いている職種 */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-700 mb-3">向いている職種</h4>
+        <h4 className="text-sm font-semibold text-gray-700 mb-3">向いている営業スタイル</h4>
         <div className="flex flex-wrap gap-2">
           {typeDef.recommendedJobs.map((job) => (
             <span
@@ -118,7 +119,7 @@ export default function Step3Result({ answers, onNext, onBack }: Props) {
 
       {/* おすすめ求人 */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-700 mb-3">あなたにおすすめの求人</h4>
+        <h4 className="text-sm font-semibold text-gray-700 mb-3">このタイプが狙える求人例</h4>
         <div className="border border-gray-200 rounded-xl overflow-hidden">
           <div className="p-4 border-b border-gray-100 bg-gray-50">
             <div className="flex items-start justify-between gap-2">
@@ -130,7 +131,7 @@ export default function Step3Result({ answers, onNext, onBack }: Props) {
                 className="text-xs px-2 py-1 rounded-full text-white shrink-0"
                 style={{ background: typeDef.color }}
               >
-                おすすめ
+                イメージ
               </span>
             </div>
           </div>
@@ -148,6 +149,13 @@ export default function Step3Result({ answers, onNext, onBack }: Props) {
               ))}
             </div>
           </div>
+        </div>
+        <p className="text-xs text-gray-400 mt-2">※掲載内容はイメージです。実在の求人ではありません。</p>
+        <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-4">
+          <p className="text-sm text-blue-900 leading-relaxed">
+            💼 実際の求人は、提携する人材紹介会社（{SITE.partnerName}）が無料でご紹介します。
+            履歴書のダウンロード時に希望できます。
+          </p>
         </div>
       </div>
 
