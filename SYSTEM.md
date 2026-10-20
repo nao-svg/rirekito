@@ -10,7 +10,7 @@
 |------|------|
 | サービス名 | リレキト |
 | 本番URL | https://rirekito.vercel.app |
-| リポジトリ | https://github.com/naot0205-design/rirekito |
+| リポジトリ | https://github.com/nao-svg/rirekito |
 | 運営者 | 土元 直（nao.t19970205@gmail.com） |
 | コンセプト | 営業職転職希望者向け、スマホ完結の履歴書作成ツール「リレキト for 営業職」 |
 
@@ -207,7 +207,7 @@ CREATE TABLE resumes (
 ## 10. ローカル開発
 
 ```bash
-git clone https://github.com/naot0205-design/rirekito.git
+git clone https://github.com/nao-svg/rirekito.git
 cd rirekito
 npm install
 

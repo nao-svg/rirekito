@@ -10,7 +10,7 @@
 
 - **名称**: リレキト（営業職版の表示名は「リレキト for 営業職」。文言は `src/data/site.ts` の `SITE` に集約）
 - **本番URL**: https://rirekito.vercel.app/
-- **リポジトリ**: https://github.com/naot0205-design/rirekito
+- **リポジトリ**: https://github.com/nao-svg/rirekito
 - **ローカルパス**: `~/resume-app`
 - **概要**: 営業職転職向けの履歴書作成ツール（「リレキト for 営業職」）。診断 → 自己PR自動生成 → 履歴書PDF出力。
 - **状態**: 本番デプロイ済み・基本機能完成
