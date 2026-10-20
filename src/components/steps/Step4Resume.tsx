@@ -248,7 +248,7 @@ export default function Step4Resume({ basicInfo, diagnosisResult, onBack }: Prop
           <textarea
             value={userStrengths}
             onChange={(e) => setUserStrengths(e.target.value)}
-            placeholder="例：前職でExcelを使った請求書処理を月300件担当。ミスゼロを2年継続。チームの後輩指導も担当しました。"
+            placeholder="例：アパレル販売で月の売上目標を6か月連続で達成。常連のお客様を30人以上担当していました。"
             rows={4}
             className="w-full border border-blue-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
           />
