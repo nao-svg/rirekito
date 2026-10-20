@@ -90,6 +90,7 @@ export default function Home() {
             <span>·</span>
             <Link href="/partners" className="hover:text-blue-600 hover:underline">提携先一覧</Link>
           </div>
+          <p className="text-xs text-gray-400">運営：{SITE.operator}</p>
         </div>
       </main>
     );

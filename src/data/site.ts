@@ -4,4 +4,6 @@ export const SITE = {
   brand: "リレキト for 営業職",
   catchcopy: "営業への転職書類、5分で完成。",
   aiPersona: "営業職専門の転職エージェント",
+  operator: "株式会社kanata",
+  contactEmail: "info@kanata.careers",
 } as const;

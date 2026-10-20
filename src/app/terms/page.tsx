@@ -12,12 +12,12 @@ export default function TermsPage() {
         <header>
           <Link href="/" className="text-sm text-blue-600 hover:underline">← トップに戻る</Link>
           <h1 className="text-2xl font-bold text-gray-900 mt-3">利用規約</h1>
-          <p className="text-xs text-gray-500 mt-1">最終更新日：2026年10月13日</p>
+          <p className="text-xs text-gray-500 mt-1">最終更新日：2026年10月20日</p>
         </header>
 
         <section className="space-y-3 text-sm text-gray-700 leading-relaxed">
           <p>
-            本利用規約（以下「本規約」）は、本サービス「リレキト」（以下「本サービス」）の利用条件を定めるものです。ユーザーは本サービスを利用することにより、本規約に同意したものとみなされます。
+            本利用規約（以下「本規約」）は、{SITE.operator}（以下「運営者」）が提供する本サービス「リレキト」（以下「本サービス」）の利用条件を定めるものです。ユーザーは本サービスを利用することにより、本規約に同意したものとみなされます。
           </p>
         </section>
 
@@ -93,8 +93,8 @@ export default function TermsPage() {
             本規約に関するお問い合わせ、ご意見・ご要望は以下までご連絡ください。原則として5営業日以内に一次回答いたします。
           </p>
           <p className="text-gray-700 bg-gray-50 border border-gray-200 rounded-lg p-3">
-            運営者：土元 直<br />
-            連絡先：<a href="mailto:nao.t19970205@gmail.com" className="text-blue-600 hover:underline">nao.t19970205@gmail.com</a><br />
+            運営者：{SITE.operator}<br />
+            連絡先：<a href={`mailto:${SITE.contactEmail}`} className="text-blue-600 hover:underline">{SITE.contactEmail}</a><br />
             対応時間：平日10:00〜18:00（土日祝・年末年始を除く）
           </p>
         </section>

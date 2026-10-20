@@ -7,4 +7,9 @@ describe("SITE", () => {
     expect(SITE.catchcopy).toBe("営業への転職書類、5分で完成。");
     expect(SITE.aiPersona).toBe("営業職専門の転職エージェント");
   });
+
+  it("運営会社とお問い合わせ先", () => {
+    expect(SITE.operator).toBe("株式会社kanata");
+    expect(SITE.contactEmail).toBe("info@kanata.careers");
+  });
 });

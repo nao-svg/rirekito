@@ -18,7 +18,7 @@ export default function PrivacyPage() {
 
         <section className="space-y-3 text-sm text-gray-700 leading-relaxed">
           <p>
-            本サービス「リレキト」(以下「本サービス」)における個人情報の取り扱いについて、以下のとおりプライバシーポリシーを定めます。
+            {SITE.operator}(以下「運営者」)は、本サービス「リレキト」(以下「本サービス」)における個人情報の取り扱いについて、以下のとおりプライバシーポリシーを定めます。
           </p>
         </section>
 
@@ -140,8 +140,8 @@ export default function PrivacyPage() {
         <section className="space-y-2 text-sm text-gray-700 leading-relaxed">
           <h2 className="text-lg font-semibold text-gray-900">9. お問い合わせ</h2>
           <p className="text-gray-700 bg-gray-50 border border-gray-200 rounded-lg p-3">
-            運営者:土元 直<br />
-            連絡先:<a href="mailto:nao.t19970205@gmail.com" className="text-blue-600 hover:underline">nao.t19970205@gmail.com</a><br />
+            運営者:{SITE.operator}<br />
+            連絡先:<a href={`mailto:${SITE.contactEmail}`} className="text-blue-600 hover:underline">{SITE.contactEmail}</a><br />
             対応時間:平日10:00〜18:00(土日祝・年末年始を除く)
           </p>
         </section>
