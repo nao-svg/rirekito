@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SITE } from "@/data/site";
+import { SITE, PARTNER_READY } from "@/data/site";
 
 export const metadata = {
   title: "プライバシーポリシー | リレキト",
@@ -74,11 +74,17 @@ export default function PrivacyPage() {
               <strong>提携先への求人紹介のための提供:</strong>
               PDFダウンロード時に提携先への情報提供に同意するチェックを入れた場合に限り、以下のとおり提供します。
               チェックはデフォルトOFF（未選択）であり、ご自身の意思でのみ有効になります。
-              <ul className="list-[circle] list-inside pl-4 mt-1 space-y-1">
-                <li>提供先: {SITE.partnerName}（有料職業紹介事業者）</li>
-                <li>提供する情報: 氏名、電話番号・メールアドレス、履歴書の内容、アンケート回答（転職希望時期・雇用形態・希望勤務地）</li>
-                <li>提供の目的: 提供先から営業職の求人紹介を受けるため</li>
-              </ul>
+              {PARTNER_READY ? (
+                <ul className="list-[circle] list-inside pl-4 mt-1 space-y-1">
+                  <li>提供先: {SITE.partnerName}（有料職業紹介事業者）</li>
+                  <li>提供する情報: 氏名、電話番号・メールアドレス、履歴書の記載内容（写真を含む）、診断結果、アンケート回答（転職希望時期・雇用形態・希望勤務地）</li>
+                  <li>提供の目的: 提供先から営業職の求人紹介を受けるため</li>
+                </ul>
+              ) : (
+                <span className="block pl-4 mt-1">
+                  現時点では提携先は未定です。提携先が決まり次第、本ポリシーを更新のうえ提携先名を明記し、提携先への情報提供を開始する前に改めてご確認いただける機会を設けます。
+                </span>
+              )}
             </li>
           </ul>
           <p>

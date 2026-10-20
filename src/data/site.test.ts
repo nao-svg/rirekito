@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { SITE } from "@/data/site";
+import { SITE, PARTNER_PLACEHOLDER, PARTNER_READY } from "@/data/site";
 
 describe("SITE", () => {
   it("ブランド名とキャッチコピーが決定どおり", () => {
@@ -10,5 +10,9 @@ describe("SITE", () => {
 
   it("提携先名が空でない", () => {
     expect(SITE.partnerName.length).toBeGreaterThan(0);
+  });
+
+  it("PARTNER_READY は提携先名がプレースホルダーでないときだけ true", () => {
+    expect(PARTNER_READY).toBe(SITE.partnerName !== PARTNER_PLACEHOLDER);
   });
 });

@@ -5,7 +5,7 @@ import { DiagnosisAnswer, DiagnosisResult, StaffType } from "@/types";
 import { STAFF_TYPES } from "@/data/types";
 import { JOBS_BY_TYPE } from "@/data/jobs";
 import { calcDiagnosis } from "@/data/scoring";
-import { SITE } from "@/data/site";
+import { SITE, PARTNER_READY } from "@/data/site";
 
 interface Props {
   answers: DiagnosisAnswer[];
@@ -151,12 +151,13 @@ export default function Step3Result({ answers, onNext, onBack }: Props) {
           </div>
         </div>
         <p className="text-xs text-gray-400 mt-2">※掲載内容はイメージです。実在の求人ではありません。</p>
-        <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-4">
-          <p className="text-sm text-blue-900 leading-relaxed">
-            💼 実際の求人は、提携する人材紹介会社（{SITE.partnerName}）が無料でご紹介します。
-            履歴書のダウンロード時に希望できます。
-          </p>
-        </div>
+        {PARTNER_READY && (
+          <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-4">
+            <p className="text-sm text-blue-900 leading-relaxed">
+              {`💼 実際の求人は、提携する人材紹介会社（${SITE.partnerName}）が無料でご紹介します。履歴書のダウンロード時に希望できます。`}
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="flex gap-3">

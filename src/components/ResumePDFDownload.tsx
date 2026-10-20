@@ -13,7 +13,7 @@ import {
 } from "@react-pdf/renderer";
 import { useEffect, useRef, useState } from "react";
 import { BasicInfo, DiagnosisResult } from "@/types";
-import { SITE } from "@/data/site";
+import { SITE, PARTNER_READY } from "@/data/site";
 
 Font.register({
   family: "SawarabiMincho",
@@ -807,17 +807,19 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, disabled
                   に同意する <span className="text-red-500">*必須</span>
                 </span>
               </label>
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={consentPartner}
-                  onChange={(e) => setConsentPartner(e.target.checked)}
-                  className="mt-0.5 shrink-0"
-                />
-                <span className="text-xs text-gray-700 leading-relaxed">
-                  氏名・連絡先・履歴書の内容・アンケート回答を、提携する人材紹介会社（{SITE.partnerName}）に提供し、営業職の求人紹介を受けることに同意する（任意）
-                </span>
-              </label>
+              {PARTNER_READY && (
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={consentPartner}
+                    onChange={(e) => setConsentPartner(e.target.checked)}
+                    className="mt-0.5 shrink-0"
+                  />
+                  <span className="text-xs text-gray-700 leading-relaxed">
+                    氏名・連絡先・履歴書の記載内容（写真を含む）・診断結果・アンケート回答を、提携する人材紹介会社（{SITE.partnerName}）に提供し、営業職の求人紹介を受けることに同意する（任意）
+                  </span>
+                </label>
+              )}
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
