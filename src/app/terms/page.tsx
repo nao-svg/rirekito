@@ -94,6 +94,8 @@ export default function TermsPage() {
           </p>
           <p className="text-gray-700 bg-gray-50 border border-gray-200 rounded-lg p-3">
             運営者：{SITE.operator}<br />
+            住所：{SITE.operatorAddress}<br />
+            代表者：{SITE.representative}<br />
             連絡先：<a href={`mailto:${SITE.contactEmail}`} className="text-blue-600 hover:underline">{SITE.contactEmail}</a><br />
             対応時間：平日10:00〜18:00（土日祝・年末年始を除く）
           </p>

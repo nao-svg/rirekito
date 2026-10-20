@@ -6,4 +6,6 @@ export const SITE = {
   aiPersona: "営業職専門の転職エージェント",
   operator: "株式会社kanata",
   contactEmail: "info@kanata.careers",
+  operatorAddress: "神奈川県横浜市南区新川町5-30-2",
+  representative: "代表取締役 土元直",
 } as const;

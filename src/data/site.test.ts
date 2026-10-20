@@ -11,5 +11,7 @@ describe("SITE", () => {
   it("運営会社とお問い合わせ先", () => {
     expect(SITE.operator).toBe("株式会社kanata");
     expect(SITE.contactEmail).toBe("info@kanata.careers");
+    expect(SITE.operatorAddress).toBe("神奈川県横浜市南区新川町5-30-2");
+    expect(SITE.representative).toBe("代表取締役 土元直");
   });
 });

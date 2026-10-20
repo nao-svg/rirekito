@@ -53,7 +53,7 @@ export default function PrivacyPage() {
             履歴書の入力中およびPDFの生成は、ブラウザ上で処理されます。ただし、履歴書PDFをダウンロードする際には、電話番号またはメールアドレス（いずれか1つ以上が必須です）、同意情報、アンケート回答、診断結果、および入力いただいた履歴書の情報（氏名・フリガナ・生年月日・性別・住所・電話番号・メールアドレス・証明写真・学歴・職歴・資格・本人希望）が、提携先への情報提供への同意の有無にかかわらず、本サービスのサーバーに保存されます。
           </p>
           <p>
-            上記の情報は、本サービスのデータベース（Supabase、米国）に保存されます。
+            上記の情報は、本サービスのデータベース（Supabase）に保存されます。データの保存場所は日本国内（東京リージョン）です。
           </p>
           <p>
             <strong>保有期間:</strong>
@@ -103,7 +103,7 @@ export default function PrivacyPage() {
             自己PRブラッシュアップ機能利用時、入力テキストはAnthropic社（Claude）に送信されます。氏名・住所・電話番号などは送信されません。
           </p>
           <p>
-            電話番号・メールアドレス・履歴書データは Supabase, Inc.（米国）のデータベースに保存されます。
+            電話番号・メールアドレス・履歴書データは、Supabase, Inc.（米国の事業者）が提供するデータベースに保存されます。データの保存場所は日本国内（東京リージョン）です。
             Supabase のプライバシーポリシーは <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">supabase.com/privacy</a> をご確認ください。
           </p>
         </section>
@@ -141,6 +141,8 @@ export default function PrivacyPage() {
           <h2 className="text-lg font-semibold text-gray-900">9. お問い合わせ</h2>
           <p className="text-gray-700 bg-gray-50 border border-gray-200 rounded-lg p-3">
             運営者:{SITE.operator}<br />
+            住所:{SITE.operatorAddress}<br />
+            代表者:{SITE.representative}<br />
             連絡先:<a href={`mailto:${SITE.contactEmail}`} className="text-blue-600 hover:underline">{SITE.contactEmail}</a><br />
             対応時間:平日10:00〜18:00(土日祝・年末年始を除く)
           </p>
