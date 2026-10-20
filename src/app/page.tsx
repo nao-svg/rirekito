@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { SITE } from "@/data/site";
 import { BasicInfo, DiagnosisAnswer, DiagnosisResult, Step } from "@/types";
 import Step1BasicInfo from "@/components/steps/Step1BasicInfo";
 import Step2Diagnosis from "@/components/steps/Step2Diagnosis";
@@ -50,13 +51,13 @@ export default function Home() {
               <span className="text-white text-3xl">📄</span>
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-3">
-              リレキト
+              {SITE.brand}
             </h1>
             <p className="text-base text-gray-700 leading-relaxed mb-2">
-              事務職の応募書類、<br />全部まとめて終わらせよう。
+              営業への転職書類、<br />5分で完成。
             </p>
             <p className="text-gray-500 text-sm leading-relaxed">
-              強みを診断するだけで、自己PRが完成。<br />
+              強みを診断するだけで、営業向けの自己PRが完成。<br />
               そのまま履歴書PDFで出力できます。
             </p>
           </div>
@@ -81,7 +82,7 @@ export default function Home() {
           >
             無料ではじめる →
           </button>
-          <p className="text-xs text-gray-400">登録不要・完全無料</p>
+          <p className="text-xs text-gray-400">完全無料・5分で完成</p>
           <div className="flex justify-center gap-4 text-xs text-gray-400 pt-4">
             <Link href="/privacy" className="hover:text-blue-600 hover:underline">プライバシーポリシー</Link>
             <span>·</span>
@@ -97,7 +98,7 @@ export default function Home() {
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-3">
-            <span className="font-bold text-gray-800 text-sm">リレキト</span>
+            <span className="font-bold text-gray-800 text-sm">{SITE.brand}</span>
             <span className="text-xs text-gray-400">STEP {step} / 4</span>
           </div>
           <div className="flex gap-1">

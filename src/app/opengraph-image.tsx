@@ -1,8 +1,9 @@
 import { ImageResponse } from "next/og";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { SITE } from "@/data/site";
 
-export const alt = "リレキト｜事務職の履歴書、強み診断で一気に仕上げる";
+export const alt = `${SITE.brand}｜${SITE.catchcopy}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -28,16 +29,16 @@ export default async function OgImage() {
         <div style={{ position: "absolute", bottom: -60, left: -60, width: 280, height: 280, borderRadius: "50%", background: "rgba(196,181,253,0.3)", display: "flex" }} />
 
         <div style={{ fontSize: 28, fontWeight: 700, color: "#3B82F6", letterSpacing: "0.05em", marginBottom: 24, display: "flex" }}>
-          リレキト
+          {SITE.brand}
         </div>
 
-        <div style={{ fontSize: 56, fontWeight: 900, color: "#1E3A5F", textAlign: "center", lineHeight: 1.3, marginBottom: 28, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <span>事務職の履歴書を</span>
-          <span style={{ color: "#2563EB" }}>強み診断で一気に仕上げる</span>
+        <div style={{ fontSize: 64, fontWeight: 900, color: "#1E3A5F", textAlign: "center", lineHeight: 1.3, marginBottom: 28, display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <span>営業への転職書類、</span>
+          <span style={{ color: "#2563EB" }}>5分で完成。</span>
         </div>
 
         <div style={{ fontSize: 26, color: "#475569", textAlign: "center", marginBottom: 48, display: "flex" }}>
-          診断するだけで自己PRが完成。登録不要・完全無料。
+          強みを診断するだけで、営業向けの自己PRが完成。完全無料。
         </div>
 
         <div style={{ display: "flex", gap: 16 }}>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { SITE } from "@/data/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -7,22 +8,25 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+const TITLE = `${SITE.brand}｜${SITE.catchcopy}`;
+const OG_DESCRIPTION = "強みを診断するだけで営業向けの自己PRが完成。完全無料で履歴書PDFを出力できます。";
+
 export const metadata: Metadata = {
-  title: "リレキト｜事務職の履歴書、強み診断で一気に仕上げる",
+  title: TITLE,
   description:
-    "リレキトは事務職への転職に特化した履歴書作成ツール。強みを診断するだけで自己PRが完成し、そのまま履歴書PDFで出力できます。登録不要・完全無料。",
+    "リレキト for 営業職は、営業職への転職に特化した履歴書作成ツール。強みを診断するだけで営業向けの自己PRが完成し、そのまま履歴書PDFで出力できます。完全無料。",
   openGraph: {
-    title: "リレキト｜事務職の履歴書、強み診断で一気に仕上げる",
-    description: "診断するだけで自己PRが完成。登録不要・完全無料でPDF出力できます。",
+    title: TITLE,
+    description: OG_DESCRIPTION,
     url: "https://rirekito.vercel.app/",
-    siteName: "リレキト",
+    siteName: SITE.brand,
     locale: "ja_JP",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "リレキト｜事務職の履歴書、強み診断で一気に仕上げる",
-    description: "診断するだけで自己PRが完成。登録不要・完全無料でPDF出力できます。",
+    title: TITLE,
+    description: OG_DESCRIPTION,
   },
 };
 
