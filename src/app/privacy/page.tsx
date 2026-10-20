@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { SITE, PARTNER_READY } from "@/data/site";
+import { SITE } from "@/data/site";
+import { ACTIVE_PARTNERS, PARTNER_READY } from "@/data/partners";
 
 export const metadata = {
   title: `プライバシーポリシー | ${SITE.brand}`,
@@ -12,7 +13,7 @@ export default function PrivacyPage() {
         <header>
           <Link href="/" className="text-sm text-blue-600 hover:underline">← トップに戻る</Link>
           <h1 className="text-2xl font-bold text-gray-900 mt-3">プライバシーポリシー</h1>
-          <p className="text-xs text-gray-500 mt-1">最終更新日:2026年10月13日</p>
+          <p className="text-xs text-gray-500 mt-1">最終更新日:2026年10月20日</p>
         </header>
 
         <section className="space-y-3 text-sm text-gray-700 leading-relaxed">
@@ -77,7 +78,9 @@ export default function PrivacyPage() {
               チェックはデフォルトOFF（未選択）であり、ご自身の意思でのみ有効になります。
               {PARTNER_READY ? (
                 <ul className="list-[circle] list-inside pl-4 mt-1 space-y-1">
-                  <li>提供先: {SITE.partnerName}（有料職業紹介事業者）</li>
+                  <li>
+                    提供先: <Link href="/partners" className="text-blue-600 hover:underline">提携先一覧</Link>に記載の有料職業紹介事業者（現在: {ACTIVE_PARTNERS.map((p) => p.name).join("、")}）。各提携先には、その提携開始日以降に同意いただいた方の情報のみを提供します
+                  </li>
                   <li>提供する情報: 氏名、電話番号・メールアドレス、履歴書の記載内容（写真を含む）、診断結果、アンケート回答（転職希望時期・雇用形態・希望勤務地）</li>
                   <li>提供の目的: 提供先から営業職の求人紹介を受けるため</li>
                 </ul>

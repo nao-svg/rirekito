@@ -87,6 +87,8 @@ export default function Home() {
             <Link href="/privacy" className="hover:text-blue-600 hover:underline">プライバシーポリシー</Link>
             <span>·</span>
             <Link href="/terms" className="hover:text-blue-600 hover:underline">利用規約</Link>
+            <span>·</span>
+            <Link href="/partners" className="hover:text-blue-600 hover:underline">提携先一覧</Link>
           </div>
         </div>
       </main>

@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { DiagnosisAnswer, DiagnosisResult, StaffType } from "@/types";
 import { STAFF_TYPES } from "@/data/types";
 import { JOBS_BY_TYPE } from "@/data/jobs";
 import { calcDiagnosis } from "@/data/scoring";
-import { SITE, PARTNER_READY } from "@/data/site";
+import { ACTIVE_PARTNERS, PARTNER_READY } from "@/data/partners";
 
 interface Props {
   answers: DiagnosisAnswer[];
@@ -154,7 +155,8 @@ export default function Step3Result({ answers, onNext, onBack }: Props) {
         {PARTNER_READY && (
           <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-4">
             <p className="text-sm text-blue-900 leading-relaxed">
-              {`💼 実際の求人は、提携する人材紹介会社（${SITE.partnerName}）が無料でご紹介します。履歴書のダウンロード時に希望できます。`}
+              {`💼 実際の求人は、提携する人材紹介会社（${ACTIVE_PARTNERS.map((p) => p.name).join("、")}）が無料でご紹介します。履歴書のダウンロード時に希望できます。`}
+              <Link href="/partners" target="_blank" className="ml-1 text-xs text-blue-600 underline">提携先一覧</Link>
             </p>
           </div>
         )}
