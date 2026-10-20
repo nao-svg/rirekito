@@ -2,7 +2,7 @@ import Link from "next/link";
 import { SITE, PARTNER_READY } from "@/data/site";
 
 export const metadata = {
-  title: "プライバシーポリシー | リレキト",
+  title: `プライバシーポリシー | ${SITE.brand}`,
 };
 
 export default function PrivacyPage() {
@@ -12,7 +12,7 @@ export default function PrivacyPage() {
         <header>
           <Link href="/" className="text-sm text-blue-600 hover:underline">← トップに戻る</Link>
           <h1 className="text-2xl font-bold text-gray-900 mt-3">プライバシーポリシー</h1>
-          <p className="text-xs text-gray-500 mt-1">最終更新日:2026年5月8日</p>
+          <p className="text-xs text-gray-500 mt-1">最終更新日:2026年10月13日</p>
         </header>
 
         <section className="space-y-3 text-sm text-gray-700 leading-relaxed">
@@ -23,12 +23,13 @@ export default function PrivacyPage() {
 
         <section className="space-y-2 text-sm text-gray-700 leading-relaxed">
           <h2 className="text-lg font-semibold text-gray-900">1. 取得する情報と利用目的</h2>
-          <p>本サービスでは、以下の情報を取得します:</p>
+          <p>本サービスでは、以下の情報を取得します。このうち、自己診断の個別の回答と自己PR文章を除く情報（診断結果のタイプを含む）は、履歴書PDFをダウンロードする際に、本サービスのサーバー（Supabase）へ保存されます:</p>
           <ul className="list-disc list-inside space-y-1 pl-2">
             <li>氏名・フリガナ・生年月日・性別</li>
             <li>住所・電話番号・メールアドレス</li>
             <li>学歴・職歴・資格情報</li>
-            <li>顔写真(任意)</li>
+            <li>証明写真(任意)</li>
+            <li>本人希望</li>
             <li>自己診断の回答・自己PR文章</li>
           </ul>
           <p className="text-gray-600 mt-2">
@@ -38,8 +39,8 @@ export default function PrivacyPage() {
             <li>履歴書PDFの生成</li>
             <li>自己PR文章の最適化（AIブラッシュアップ機能）</li>
             <li>
-              <strong>PDFダウンロード時にメールアドレスを任意でご登録いただいた場合:</strong>
-              転職に役立つ情報の提供、および同意いただいた場合には提携する有料職業紹介事業者からの求人案内の提供
+              <strong>PDFダウンロード時にご登録いただいた電話番号・メールアドレス:</strong>
+              連絡先として利用し、同意いただいた場合には、転職に役立つ情報の提供、および提携する有料職業紹介事業者からの求人案内の提供
             </li>
             <li>サービス改善のための統計分析</li>
           </ul>
@@ -48,16 +49,16 @@ export default function PrivacyPage() {
         <section className="space-y-2 text-sm text-gray-700 leading-relaxed">
           <h2 className="text-lg font-semibold text-gray-900">2. 情報の保存・保有期間</h2>
           <p>
-            履歴書作成に利用する個人情報（氏名・住所等）は、原則として本サービスのサーバーに保存されず、ブラウザ上のみで処理されます。
+            履歴書の入力中およびPDFの生成は、ブラウザ上で処理されます。ただし、履歴書PDFをダウンロードする際には、電話番号またはメールアドレス（いずれか1つ以上が必須です）、同意情報、アンケート回答、診断結果、および入力いただいた履歴書の情報（氏名・フリガナ・生年月日・性別・住所・電話番号・メールアドレス・証明写真・学歴・職歴・資格・本人希望）が、提携先への情報提供への同意の有無にかかわらず、本サービスのサーバーに保存されます。
           </p>
           <p>
-            PDFダウンロード時に任意でメールアドレスをご登録いただいた場合、当該情報は本サービスのデータベース（Supabase、米国）に保存されます。
+            上記の情報は、本サービスのデータベース（Supabase、米国）に保存されます。
           </p>
           <p>
             <strong>保有期間:</strong>
           </p>
           <ul className="list-disc list-inside space-y-1 pl-2">
-            <li>メールアドレス・同意情報・履歴書データ: ユーザーからの削除請求があるまで、または本サービス終了時まで</li>
+            <li>電話番号・メールアドレス・同意情報・アンケート回答・診断結果・履歴書データ: ユーザーからの削除請求があるまで、または本サービス終了時まで</li>
             <li>サーバログ(IPアドレス・アクセス時刻): 最大90日間</li>
             <li>外部AIサービスに送信されたテキスト: Anthropic社の規約に従う(最大30日間で削除)</li>
           </ul>
@@ -99,7 +100,7 @@ export default function PrivacyPage() {
             自己PRブラッシュアップ機能利用時、入力テキストはAnthropic社（Claude）に送信されます。氏名・住所・電話番号などは送信されません。
           </p>
           <p>
-            メールアドレス・履歴書データは Supabase, Inc.（米国）のデータベースに保存されます。
+            電話番号・メールアドレス・履歴書データは Supabase, Inc.（米国）のデータベースに保存されます。
             Supabase のプライバシーポリシーは <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">supabase.com/privacy</a> をご確認ください。
           </p>
         </section>

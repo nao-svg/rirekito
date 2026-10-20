@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { SITE } from "@/data/site";
 
 export const metadata = {
-  title: "利用規約 | リレキト",
+  title: `利用規約 | ${SITE.brand}`,
 };
 
 export default function TermsPage() {
@@ -11,7 +12,7 @@ export default function TermsPage() {
         <header>
           <Link href="/" className="text-sm text-blue-600 hover:underline">← トップに戻る</Link>
           <h1 className="text-2xl font-bold text-gray-900 mt-3">利用規約</h1>
-          <p className="text-xs text-gray-500 mt-1">最終更新日：2026年5月8日</p>
+          <p className="text-xs text-gray-500 mt-1">最終更新日：2026年10月13日</p>
         </header>
 
         <section className="space-y-3 text-sm text-gray-700 leading-relaxed">
@@ -30,7 +31,7 @@ export default function TermsPage() {
         <section className="space-y-2 text-sm text-gray-700 leading-relaxed">
           <h2 className="text-lg font-semibold text-gray-900">第2条（利用登録）</h2>
           <p>
-            本サービスの利用に登録は不要です。ユーザーは本サービスにアクセスし、必要事項を入力することで利用を開始できます。
+            本サービスは会員登録なしで利用を開始できます。ただし、履歴書PDFを出力する際には、電話番号またはメールアドレスと、入力いただいた履歴書の情報を本サービスに登録していただきます。
           </p>
         </section>
 
