@@ -29,7 +29,7 @@ export const leadSchema = z.object({
   consent: z.literal(true),
   diagnosisType: z.enum(STAFF_TYPE_NAMES),
   freeAnswers: z.object({ passion: freeAnswer, complaint: freeAnswer, action: freeAnswer }),
-  selfPR: z.string().trim().min(1).max(600),
+  selfPR: z.string().trim().max(600), // ダウンロード画面から相談した人だけ入る（空でもよい）
   refSource: z.string().trim().max(100).nullable(),
   shownPartners: z.array(z.string().max(100)).max(10), // 同意画面に表示した提携先名
 });
@@ -42,7 +42,7 @@ export function partnersMatch(shown: string[], active: string[]): boolean {
 }
 
 export function leadConsentText(partnerNames: string[]): string {
-  return `入力した内容（自己PRづくりの回答を含む）・診断結果・自己PRを、提携先一覧に記載の人材紹介会社（${partnerNames.join("、")}）に提供し、連絡を受けることに同意します`;
+  return `入力した内容・診断結果（自己PRを書いた場合はその文章も）を、提携先一覧に記載の人材紹介会社（${partnerNames.join("、")}）に提供し、連絡を受けることに同意します`;
 }
 
 export function buildLeadEmail(lead: LeadInput, leadId: string, partnerNames: string[]): { subject: string; text: string } {
@@ -60,7 +60,7 @@ export function buildLeadEmail(lead: LeadInput, leadId: string, partnerNames: st
     `診断タイプ: ${lead.diagnosisType}`,
     `提供先候補: ${partnerNames.join("、")}`,
     "",
-    "自由回答と自己PRは Supabase の sales_leads テーブルで確認してください。BEPRIDE に渡したら provided_at と provided_to を記入してください。",
+    "自己PR（書いた人のみ）は Supabase の sales_leads テーブルで確認してください。BEPRIDE に渡したら provided_at と provided_to を記入してください。",
   ].join("\n");
   return { subject, text };
 }

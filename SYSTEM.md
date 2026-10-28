@@ -19,7 +19,7 @@
 ```
 [無料履歴書ツール] ← SNS・インフルエンサー集客
         ↓
-   診断 → 自己PRづくり → 出口を選ぶ
+   診断 → 結果 → 出口を選ぶ
         ├ 出口B：自分で完成（ダウンロード時に連絡先＋同意取得 → users / resumes）
         └ 出口A：プロと一緒に仕上げる（面談申し込み＋同意 → sales_leads、kanata へ通知メール）
         ↓
@@ -55,7 +55,6 @@ src/
 │   ├── terms/page.tsx            # 利用規約
 │   ├── partners/                 # 提携先一覧
 │   └── api/
-│       ├── self-pr/route.ts      # 自由回答から自己PRを作る（Claude API）
 │       ├── career-summary/route.ts # 職務要約を作る（Claude API）
 │       ├── leads/route.ts        # 面談申し込みの保存＋通知メール（出口A）
 │       └── register/route.ts     # ユーザー登録・同意保存（出口Bのダウンロード時）
@@ -65,7 +64,6 @@ src/
 │   └── steps/
 │       ├── Step2Diagnosis.tsx    # 診断
 │       ├── Step3Result.tsx       # 診断結果
-│       ├── PRStep.tsx            # 自己PRづくり（自由回答3問）
 │       ├── ExitChoice.tsx        # 2つの出口の選択
 │       ├── LeadForm.tsx          # 出口A：面談申し込みフォーム
 │       ├── Step1BasicInfo.tsx    # 出口B：基本情報入力
@@ -103,9 +101,6 @@ diagnosis 診断（10問・三択＋経験の質問）
 result 診断結果
   └─ タイプ表示。経験が無い人にも「営業マン、いける！」と伝える
 
-pr 自己PRづくり
-  └─ 自由回答3問 → /api/self-pr で自己PRを生成（本人の回答に無い数字・実績は入れない）
-
 exit 出口の選択
   ├─ 出口B：自分で完成
   │    basic 基本情報 → career 職務経歴（/api/career-summary）→ download
@@ -115,7 +110,7 @@ exit 出口の選択
        └─ 完了画面で提携先の LINE を案内
 ```
 
-診断結果・自由回答・自己PRは、出口を選ぶまでブラウザの `sessionStorage`（`rirekito_flow_v1`。タブを閉じると消える。流入元 `ref_source` も同じ）にだけ保存し、サーバーには保存しない（AI 生成のための送信を除く）。
+診断結果は、出口を選ぶまでブラウザの `sessionStorage`（`rirekito_flow_v1`。タブを閉じると消える。流入元 `ref_source` も同じ）にだけ保存し、サーバーには保存しない（AI 生成のための送信を除く）。
 
 ---
 
@@ -154,7 +149,7 @@ CREATE TABLE sales_leads (
   current_job       TEXT NOT NULL,
   desired_job       TEXT NOT NULL,
   diagnosis_type    TEXT NOT NULL,
-  free_answers      JSONB NOT NULL,     -- 自己PRづくりの自由回答
+  free_answers      JSONB NOT NULL,     -- 旧・自己PRづくりの自由回答（2026-10-28 に画面を廃止。今は空で入る）
   self_pr           TEXT NOT NULL,
   consent_text      TEXT NOT NULL,      -- 同意いただいた文面
   partners_at_consent TEXT[] NOT NULL,  -- 同意時点の提携先名
@@ -192,10 +187,6 @@ CREATE TABLE sales_leads (
 ```
 
 ---
-
-### POST `/api/self-pr`
-
-自由回答（熱中したこと・仕事での不満・その行動）と診断タイプから自己PRを Claude で作る。旧 `/api/brushup-pr`（自己PRブラッシュアップ）は削除し、これに置き換えた。ストリーミングレスポンス（`text/plain`）。
 
 ### POST `/api/career-summary`
 

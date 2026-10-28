@@ -9,12 +9,12 @@ const geistSans = Geist({
 });
 
 const TITLE = `${SITE.brand}｜${SITE.catchcopy}`;
-const OG_DESCRIPTION = "学歴・職歴は関係なし。選ぶだけの診断で、あなたの営業マン適性と強みがわかります。自己PR・履歴書・職務経歴書まで無料で作れます。";
+const OG_DESCRIPTION = "学歴・職歴は関係なし。選ぶだけの診断で、あなたの営業マン適性と強みがわかります。履歴書・職務経歴書まで無料で作れます。";
 
 export const metadata: Metadata = {
   title: TITLE,
   description:
-    "リレキト for 営業職は、学歴・職歴に関係なく営業職をめざす人のための無料ツール。12問の診断で営業マン適性と強みがわかり、自己PR・履歴書・職務経歴書まで作れます。",
+    "リレキト for 営業職は、学歴・職歴に関係なく営業職をめざす人のための無料ツール。12問の診断で営業マン適性と強みがわかり、履歴書・職務経歴書まで作れます。",
   openGraph: {
     title: TITLE,
     description: OG_DESCRIPTION,

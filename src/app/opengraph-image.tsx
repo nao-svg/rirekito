@@ -42,7 +42,7 @@ export default async function OgImage() {
         </div>
 
         <div style={{ display: "flex", gap: 16 }}>
-          {["登録なしで診断", "AI自己PR", "履歴書・職務経歴書"].map((label) => (
+          {["登録なしで診断", "履歴書", "職務経歴書"].map((label) => (
             <div key={label} style={{ background: "white", borderRadius: 999, padding: "10px 24px", fontSize: 20, color: "#2563EB", fontWeight: 700, boxShadow: "0 2px 12px rgba(37,99,235,0.15)", display: "flex" }}>
               {label}
             </div>
