@@ -33,16 +33,16 @@ export default async function OgImage() {
         </div>
 
         <div style={{ fontSize: 64, fontWeight: 900, color: "#1E3A5F", textAlign: "center", lineHeight: 1.3, marginBottom: 28, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <span>営業への転職書類、</span>
-          <span style={{ color: "#2563EB" }}>5分で完成。</span>
+          <span>誰でもビジネスマンに</span>
+          <span style={{ color: "#2563EB" }}>なれる。</span>
         </div>
 
         <div style={{ fontSize: 26, color: "#475569", textAlign: "center", marginBottom: 48, display: "flex" }}>
-          強みを診断するだけで、営業向けの自己PRが完成。完全無料。
+          12問で無料診断。学歴・職歴は関係なし。
         </div>
 
         <div style={{ display: "flex", gap: 16 }}>
-          {["スマホ完結", "PDF即出力", "AI自己PR"].map((label) => (
+          {["登録なしで診断", "AI自己PR", "履歴書・職務経歴書"].map((label) => (
             <div key={label} style={{ background: "white", borderRadius: 999, padding: "10px 24px", fontSize: 20, color: "#2563EB", fontWeight: 700, boxShadow: "0 2px 12px rgba(37,99,235,0.15)", display: "flex" }}>
               {label}
             </div>

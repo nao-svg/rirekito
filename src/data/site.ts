@@ -2,7 +2,7 @@
 // 送客先の会社は src/data/partners.ts で管理する
 export const SITE = {
   brand: "リレキト for 営業職",
-  catchcopy: "営業への転職書類、5分で完成。",
+  catchcopy: "誰でもビジネスマンになれる。12問で無料診断",
   aiPersona: "営業職専門の転職エージェント",
   operator: "株式会社kanata",
   contactEmail: "info@kanata.careers",
