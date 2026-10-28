@@ -1,49 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { DiagnosisAnswer, DiagnosisResult, StaffType } from "@/types";
+import { useEffect, useMemo, useState } from "react";
+import { DiagnosisAnswer, DiagnosisResult } from "@/types";
 import { STAFF_TYPES } from "@/data/types";
 import { JOBS_BY_TYPE } from "@/data/jobs";
 import { calcDiagnosis } from "@/data/scoring";
-import { ACTIVE_PARTNERS, PARTNER_READY } from "@/data/partners";
+import { encouragementReasons, type ExperienceAnswers } from "@/data/experience";
 
 interface Props {
   answers: DiagnosisAnswer[];
+  experience: ExperienceAnswers;
   onNext: (result: DiagnosisResult) => void;
   onBack: () => void;
 }
 
-export default function Step3Result({ answers, onNext, onBack }: Props) {
-  const [loading, setLoading] = useState(true);
-  const [result, setResult] = useState<{ type: StaffType; reason: string } | null>(null);
-  const [error, setError] = useState(false);
+export default function Step3Result({ answers, experience, onNext, onBack }: Props) {
   const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
-    const diagnose = async () => {
-      try {
-        const type = calcDiagnosis(answers);
-        setResult({ type, reason: "" });
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-    diagnose();
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
+
+  const result = useMemo(() => {
+    try {
+      return { type: calcDiagnosis(answers) };
+    } catch {
+      return null;
+    }
   }, [answers]);
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-24 gap-4">
-        <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
-        <p className="text-sm text-gray-500">AIが診断中です...</p>
-      </div>
-    );
-  }
-
-  if (error || !result) {
+  if (!result) {
     return (
       <div className="text-center py-12">
         <p className="text-red-500 text-sm">診断に失敗しました。もう一度お試しください。</p>
@@ -70,9 +56,14 @@ export default function Step3Result({ answers, onNext, onBack }: Props) {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-xl font-bold text-gray-800 mb-1">診断結果</h2>
-        <p className="text-sm text-gray-500">あなたのタイプが判明しました</p>
+      <div className="text-center space-y-2">
+        <p className="text-sm text-gray-500">あなたは</p>
+        <h2 className="text-4xl font-extrabold text-blue-600">営業マン、いける！</h2>
+        <div className="mt-4 rounded-xl bg-blue-50 border border-blue-100 p-4 text-left space-y-2">
+          {encouragementReasons(experience, result.type).map((r) => (
+            <p key={r} className="text-sm text-blue-900 leading-relaxed">{r}</p>
+          ))}
+        </div>
       </div>
 
       {/* タイプカード */}
@@ -99,7 +90,6 @@ export default function Step3Result({ answers, onNext, onBack }: Props) {
       <div className="bg-gray-50 rounded-xl p-5">
         <h4 className="text-sm font-semibold text-gray-700 mb-2">あなたの特徴</h4>
         <p className="text-sm text-gray-600 leading-relaxed">{typeDef.description}</p>
-        <p className="text-xs text-gray-400 mt-3 leading-relaxed">{result.reason}</p>
       </div>
 
       {/* 向いている職種 */}
@@ -152,14 +142,6 @@ export default function Step3Result({ answers, onNext, onBack }: Props) {
           </div>
         </div>
         <p className="text-xs text-gray-400 mt-2">※掲載内容はイメージです。実在の求人ではありません。</p>
-        {PARTNER_READY && (
-          <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-4">
-            <p className="text-sm text-blue-900 leading-relaxed">
-              {`💼 実際の求人は、提携する人材紹介会社（${ACTIVE_PARTNERS.map((p) => p.name).join("、")}）が無料でご紹介します。履歴書のダウンロード時に希望できます。`}
-              <Link href="/partners" target="_blank" className="ml-1 text-xs text-blue-600 underline">提携先一覧</Link>
-            </p>
-          </div>
-        )}
       </div>
 
       <div className="flex gap-3">
@@ -179,7 +161,7 @@ export default function Step3Result({ answers, onNext, onBack }: Props) {
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               処理中...
             </>
-          ) : "履歴書を完成させる →"}
+          ) : "この強みで自己PRを作る →"}
         </button>
       </div>
     </div>
