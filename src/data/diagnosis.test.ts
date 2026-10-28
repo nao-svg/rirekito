@@ -28,6 +28,12 @@ describe("診断タイプ", () => {
     expect(t.selfPR).toContain("貴社でも");
   });
 
+  it.each(STAFF_TYPES.map((t) => [t.name, t] as const))("%s の例文に数字・架空の実績が無い", (_, t) => {
+    expect(t.selfPR).not.toMatch(/[0-9０-９]/);
+    expect(t.selfPR).not.toMatch(/[一二三四五六七八九十百千万]+(か月|ヶ月|カ月|人|件|位|倍|割|年)/);
+    ["1位", "トップ", "連続", "達成しました", "獲得"].forEach((w) => expect(t.selfPR).not.toContain(w));
+  });
+
   it("事務職向けの文言が残っていない", () => {
     const text = JSON.stringify({ STAFF_TYPES, QUESTIONS, JOBS_BY_TYPE });
     expect(text).not.toContain("事務");
