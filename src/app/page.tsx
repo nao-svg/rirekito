@@ -24,6 +24,7 @@ import LeadForm from "@/components/steps/LeadForm";
 import { PARTNER_READY } from "@/data/partners";
 import CareerInput from "@/components/steps/CareerInput";
 import { ACHIEVEMENT_MAX, EMPTY_JOB, type CareerSheet } from "@/data/career";
+import LogoMark from "@/components/LogoMark";
 
 const DEFAULT_BASIC_INFO: BasicInfo = {
   name: "",
@@ -119,6 +120,10 @@ export default function Home() {
       <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center space-y-8">
           <div>
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-5 shadow-lg">
+              <LogoMark className="w-8 h-10" />
+            </div>
+            <br />
             <span className="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full mb-5">
               学歴・職歴は関係なし
             </span>

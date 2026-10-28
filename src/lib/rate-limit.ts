@@ -60,6 +60,14 @@ export type RateLimitResult =
   | { ok: true }
   | { ok: false; retryAfterSec: number; reason: "minute" | "hour" | "day" };
 
+function memRateLimit(id: string): RateLimitResult {
+  for (const [key, { max, windowMs }] of Object.entries(MEM_LIMITS) as [keyof typeof MEM_LIMITS, { max: number; windowMs: number }][]) {
+    const r = memCheck(memStore[key], id, max, windowMs);
+    if (!r.ok) return { ok: false, retryAfterSec: Math.ceil((r.resetAt - Date.now()) / 1000), reason: key };
+  }
+  return { ok: true };
+}
+
 // scope を渡すと、AI など他の API とは別に数える（scope なしのキーは従来どおり ip のまま）
 export async function rateLimit(ip: string, scope?: string): Promise<RateLimitResult> {
   const id = scope ? `${scope}:${ip}` : ip;
@@ -67,25 +75,27 @@ export async function rateLimit(ip: string, scope?: string): Promise<RateLimitRe
 
   if (!limiters) {
     // フォールバック：インメモリ
-    for (const [key, { max, windowMs }] of Object.entries(MEM_LIMITS) as [keyof typeof MEM_LIMITS, { max: number; windowMs: number }][]) {
-      const r = memCheck(memStore[key], id, max, windowMs);
-      if (!r.ok) return { ok: false, retryAfterSec: Math.ceil((r.resetAt - Date.now()) / 1000), reason: key };
-    }
-    return { ok: true };
+    return memRateLimit(id);
   }
 
   // Upstash Redis
-  const [m, h, d] = await Promise.all([
-    limiters.minute.limit(id),
-    limiters.hour.limit(id),
-    limiters.day.limit(id),
-  ]);
+  try {
+    const [m, h, d] = await Promise.all([
+      limiters.minute.limit(id),
+      limiters.hour.limit(id),
+      limiters.day.limit(id),
+    ]);
 
-  if (!m.success) return { ok: false, retryAfterSec: Math.ceil((m.reset - Date.now()) / 1000), reason: "minute" };
-  if (!h.success) return { ok: false, retryAfterSec: Math.ceil((h.reset - Date.now()) / 1000), reason: "hour" };
-  if (!d.success) return { ok: false, retryAfterSec: Math.ceil((d.reset - Date.now()) / 1000), reason: "day" };
+    if (!m.success) return { ok: false, retryAfterSec: Math.ceil((m.reset - Date.now()) / 1000), reason: "minute" };
+    if (!h.success) return { ok: false, retryAfterSec: Math.ceil((h.reset - Date.now()) / 1000), reason: "hour" };
+    if (!d.success) return { ok: false, retryAfterSec: Math.ceil((d.reset - Date.now()) / 1000), reason: "day" };
 
-  return { ok: true };
+    return { ok: true };
+  } catch (e) {
+    // Upstash 障害時に登録・AI機能まで止めない：インメモリ制限に切り替える
+    console.error("[rate-limit] Upstash error, falling back to in-memory:", e);
+    return memRateLimit(id);
+  }
 }
 
 export function getClientIp(req: Request): string {
