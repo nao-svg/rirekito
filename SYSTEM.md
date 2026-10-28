@@ -223,6 +223,7 @@ CREATE TABLE sales_leads (
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase 管理キー | **サーバーのみ・要秘匿** |
 | `RESEND_API_KEY` | 面談申し込みの通知メール送信（Resend） | **サーバーのみ・要秘匿** |
 | `LEAD_NOTIFY_FROM` | 通知メールの差出人。Resend で認証済みのドメインのアドレスにする（未設定だと `onboarding@resend.dev` になり、Resend アカウントの持ち主にしか届かない） | サーバーのみ |
+| `LEAD_NOTIFY_TO` | 通知メールの宛先。未設定なら info@kanata.careers。`LEAD_NOTIFY_FROM` が未設定の間は、Resend アカウントの登録アドレス（現在 nao@kanata.careers）にしないと届かない | サーバーのみ |
 
 ---
 

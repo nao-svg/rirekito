@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
     partnerNames,
     apiKey: process.env.RESEND_API_KEY,
     from: process.env.LEAD_NOTIFY_FROM ?? "リレキト <onboarding@resend.dev>",
-    to: SITE.contactEmail,
+    to: process.env.LEAD_NOTIFY_TO ?? SITE.contactEmail,
   });
 
   return Response.json({ ok: true });

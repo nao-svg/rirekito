@@ -113,7 +113,8 @@ resumes:
 
 - [ ] `supabase/migrations/20261028_create_sales_leads.sql` を Supabase の SQL エディタで実行する
 - [ ] `RESEND_API_KEY` を Vercel と `.env.local` に設定する
-- [ ] `LEAD_NOTIFY_FROM` を、Resend で認証（verify）済みのドメインのアドレスに設定する。未設定だと既定の `onboarding@resend.dev` になり、これは Resend アカウントの持ち主にしか届かないため、info@kanata.careers への通知が届かない可能性がある（申し込み自体は DB に保存される）
+- [ ] 当面はドメイン認証をせず、`LEAD_NOTIFY_TO=nao@kanata.careers`（Resend の登録アドレス）を設定して通知を受け取る。info@ に届けたくなったら、kanata.careers を Resend で認証してから下の `LEAD_NOTIFY_FROM` を設定し、`LEAD_NOTIFY_TO` を消す
+- [ ] （任意）`LEAD_NOTIFY_FROM` を、Resend で認証（verify）済みのドメインのアドレスに設定する。未設定だと既定の `onboarding@resend.dev` になり、これは Resend アカウントの持ち主にしか届かないため、info@kanata.careers への通知が届かない可能性がある（申し込み自体は DB に保存される）
 - [ ] プライバシーポリシーの最終更新日（`src/app/privacy/page.tsx`）を実際の本番公開日に直す（現在は作業日の 2026年10月28日）
 - [ ] 面談申し込みのリクエストには `shownPartners`（同意画面に出した提携先名）が必須。サーバーは今の提携先と違うと 409 を返す（提携先を変えたときは画面の再読み込みが必要）
 - [ ] 自己PRの例文（6タイプ）と同意文面を、社労士・弁護士・CAに確認してもらう
