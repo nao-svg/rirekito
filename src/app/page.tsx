@@ -8,6 +8,7 @@ import Step1BasicInfo from "@/components/steps/Step1BasicInfo";
 import Step2Diagnosis from "@/components/steps/Step2Diagnosis";
 import Step3Result from "@/components/steps/Step3Result";
 import Step4Resume from "@/components/steps/Step4Resume";
+import LogoMark from "@/components/LogoMark";
 
 const DEFAULT_BASIC_INFO: BasicInfo = {
   name: "",
@@ -48,7 +49,7 @@ export default function Home() {
         <div className="max-w-md w-full text-center space-y-8">
           <div>
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-6 shadow-lg">
-              <span className="text-white text-3xl">📄</span>
+              <LogoMark className="w-8 h-10" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-3">
               {SITE.brand}
