@@ -13,7 +13,7 @@ export default function PrivacyPage() {
         <header>
           <Link href="/" className="text-sm text-blue-600 hover:underline">← トップに戻る</Link>
           <h1 className="text-2xl font-bold text-gray-900 mt-3">プライバシーポリシー</h1>
-          <p className="text-xs text-gray-500 mt-1">最終更新日:2026年10月20日</p>
+          <p className="text-xs text-gray-500 mt-1">最終更新日:2026年10月28日</p>
         </header>
 
         <section className="space-y-3 text-sm text-gray-700 leading-relaxed">
@@ -24,21 +24,25 @@ export default function PrivacyPage() {
 
         <section className="space-y-2 text-sm text-gray-700 leading-relaxed">
           <h2 className="text-lg font-semibold text-gray-900">1. 取得する情報と利用目的</h2>
-          <p>本サービスでは、以下の情報を取得します。このうち、自己診断の個別の回答と自己PR文章を除く情報（診断結果のタイプを含む）は、履歴書PDFをダウンロードする際に、本サービスのサーバー（Supabase）へ保存されます:</p>
+          <p>本サービスでは、以下の情報を取得します。診断の回答・自由回答・自己PR・職務経歴の入力内容は、「履歴書・職務経歴書をダウンロードする」か「面談を申し込む」のどちらかを選ぶまでは、お使いのブラウザの中だけで扱い、本サービスのサーバーには保存しません（AIによる文章づくりのために送信する場合を除きます。第4章をご覧ください）。どちらかを選んだときに、次のとおりサーバー（Supabase）へ保存します:</p>
           <ul className="list-disc list-inside space-y-1 pl-2">
             <li>氏名・フリガナ・生年月日・性別</li>
             <li>住所・電話番号・メールアドレス</li>
             <li>学歴・職歴・資格情報</li>
             <li>証明写真(任意)</li>
             <li>本人希望</li>
-            <li>自己診断の回答・自己PR文章</li>
+            <li>自己診断の回答と診断結果のタイプ</li>
+            <li>自己PRづくりの自由回答（熱中したこと・仕事での不満とその行動）と、できあがった自己PR文章</li>
+            <li>職務経歴（期間・お店や会社の種類・雇用形態・仕事内容・頑張ったこと・活かせるスキル）</li>
+            <li>面談申し込み時にご入力いただく、呼ばれたい名前・電話番号・連絡方法・つながりやすい時間帯・現在と希望のお仕事</li>
           </ul>
           <p className="text-gray-600 mt-2">
             <strong>利用目的:</strong>
           </p>
           <ul className="list-disc list-inside space-y-1 pl-2 text-gray-600">
             <li>履歴書PDFの生成</li>
-            <li>自己PR文章の最適化（AIブラッシュアップ機能）</li>
+            <li>自己PR文章・職務要約の作成（AI機能）</li>
+            <li>面談のお申し込みへの対応（運営者からのご連絡、提携先へのお取り次ぎ）</li>
             <li>
               <strong>PDFダウンロード時にご登録いただいた電話番号・メールアドレス:</strong>
               連絡先として利用し、同意いただいた場合には、転職に役立つ情報の提供、および提携する有料職業紹介事業者からの求人案内の提供
@@ -50,8 +54,18 @@ export default function PrivacyPage() {
         <section className="space-y-2 text-sm text-gray-700 leading-relaxed">
           <h2 className="text-lg font-semibold text-gray-900">2. 情報の保存・保有期間</h2>
           <p>
-            履歴書の入力中およびPDFの生成は、ブラウザ上で処理されます。ただし、履歴書PDFをダウンロードする際には、電話番号またはメールアドレス（いずれか1つ以上が必須です）、同意情報、アンケート回答、診断結果、および入力いただいた履歴書の情報（氏名・フリガナ・生年月日・性別・住所・電話番号・メールアドレス・証明写真・学歴・職歴・資格・本人希望）が、提携先への情報提供への同意の有無にかかわらず、本サービスのサーバーに保存されます。
+            診断・自己PRづくり・履歴書や職務経歴書の入力、およびPDFの生成は、ブラウザ上で処理されます。サーバーへの保存は、次の2つのタイミングに限ります。
           </p>
+          <ul className="list-disc list-inside space-y-1 pl-2">
+            <li>
+              <strong>履歴書・職務経歴書のダウンロード時:</strong>
+              電話番号またはメールアドレス（いずれか1つ以上が必須です）、同意情報、アンケート回答、診断結果、および入力いただいた履歴書・職務経歴書の情報が、提携先への情報提供への同意の有無にかかわらず保存されます。
+            </li>
+            <li>
+              <strong>面談の申し込み時:</strong>
+              申し込みフォームに入力いただいた内容、診断結果、自由回答、自己PR文章、同意いただいた文面と同意時点の提携先名が保存されます。
+            </li>
+          </ul>
           <p>
             上記の情報は、本サービスのデータベース（Supabase）に保存されます。データの保存場所は日本国内（東京リージョン）です。
           </p>
@@ -59,7 +73,7 @@ export default function PrivacyPage() {
             <strong>保有期間:</strong>
           </p>
           <ul className="list-disc list-inside space-y-1 pl-2">
-            <li>電話番号・メールアドレス・同意情報・アンケート回答・診断結果・履歴書データ: ユーザーからの削除請求があるまで、または本サービス終了時まで</li>
+            <li>電話番号・メールアドレス・同意情報・アンケート回答・診断結果・履歴書・職務経歴書データ・面談申し込みの内容: ユーザーからの削除請求があるまで、または本サービス終了時まで</li>
             <li>サーバログ(IPアドレス・アクセス時刻): 最大90日間</li>
             <li>外部AIサービスに送信されたテキスト: Anthropic社の規約に従う(最大30日間で削除)</li>
           </ul>
@@ -74,14 +88,15 @@ export default function PrivacyPage() {
             <li>法令に基づく場合</li>
             <li>
               <strong>提携先への求人紹介のための提供:</strong>
-              PDFダウンロード時に提携先への情報提供に同意するチェックを入れた場合に限り、以下のとおり提供します。
-              チェックはデフォルトOFF（未選択）であり、ご自身の意思でのみ有効になります。
+              次の2つの場合に限り、以下のとおり提供します。
+              (1) 履歴書・職務経歴書のダウンロード時に、提携先への情報提供に同意するチェックを入れた場合。チェックはデフォルトOFF（未選択）であり、ご自身の意思でのみ有効になります。
+              (2) 「プロと一緒に仕上げる」から面談を申し込む場合。申し込みフォームの同意（必須）にチェックを入れ、入力内容・診断結果・自由回答・自己PR文章を提携先に提供することに同意いただいた場合に限ります。提供の前に、運営者が内容を確認します。
               {PARTNER_READY ? (
                 <ul className="list-[circle] list-inside pl-4 mt-1 space-y-1">
                   <li>
                     提供先: <Link href="/partners" className="text-blue-600 hover:underline">提携先一覧</Link>に記載の有料職業紹介事業者（現在: {ACTIVE_PARTNERS.map((p) => p.name).join("、")}）。各提携先には、その提携開始日以降に同意いただいた方の情報のみを提供します
                   </li>
-                  <li>提供する情報: 氏名、電話番号・メールアドレス、履歴書の記載内容（写真を含む）、診断結果、アンケート回答（転職希望時期・雇用形態・希望勤務地）</li>
+                  <li>提供する情報: 氏名または呼ばれたい名前、電話番号・メールアドレス、連絡方法・つながりやすい時間帯、現在と希望のお仕事、履歴書・職務経歴書の記載内容（写真を含む）、診断結果、自由回答、自己PR文章、アンケート回答（転職希望時期・雇用形態・希望勤務地）。いずれも、上記(1)(2)のうちご自身が選んだ方法で入力・同意された範囲に限ります</li>
                   <li>提供の目的: 提供先から営業職の求人紹介を受けるため</li>
                 </ul>
               ) : (
@@ -100,11 +115,15 @@ export default function PrivacyPage() {
         <section className="space-y-2 text-sm text-gray-700 leading-relaxed">
           <h2 className="text-lg font-semibold text-gray-900">4. 外部サービスへの送信</h2>
           <p>
-            自己PRブラッシュアップ機能利用時、入力テキストはAnthropic社（Claude）に送信されます。氏名・住所・電話番号などは送信されません。
+            自己PRや職務要約をAIで作る際、自己PRづくりの自由回答と職務経歴の入力内容は、Anthropic社（Claude、米国の事業者）に送信されます。入力内容にお店の名前などが含まれる場合は、そのまま送信されます。氏名・住所・電話番号などは送信されません。
           </p>
           <p>
             電話番号・メールアドレス・履歴書データは、Supabase, Inc.（米国の事業者）が提供するデータベースに保存されます。データの保存場所は日本国内（東京リージョン）です。
             Supabase のプライバシーポリシーは <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">supabase.com/privacy</a> をご確認ください。
+          </p>
+          <p>
+            面談の申し込みがあったことを運営者へ知らせるメールは、メール配信サービス（Resend, Inc.、米国の事業者）を通じて送信します。そのため、申し込みをされた方の呼ばれたい名前・電話番号・連絡方法・つながりやすい時間帯などが、運営者への通知を目的として米国にある同社に送信（提供・委託）されます。
+            Resend のプライバシーポリシーは <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">resend.com/legal/privacy-policy</a> をご確認ください。
           </p>
         </section>
 
@@ -119,7 +138,7 @@ export default function PrivacyPage() {
           <h2 className="text-lg font-semibold text-gray-900">6. 開示・訂正・削除請求</h2>
           <p>
             個人情報保護法に基づき、ご自身の個人情報の開示・訂正・利用停止・削除を請求できます。
-            メールに「データ削除請求」と明記のうえ、下記窓口までご連絡ください。原則として2週間以内に対応します。
+            メールに「データ削除請求」と明記のうえ、下記窓口までご連絡ください。原則として2週間以内に対応します。面談の申し込みの取り消し、および申し込み内容の削除も、同じ窓口（{SITE.contactEmail}）で受け付けます。
           </p>
         </section>
 

@@ -1,6 +1,6 @@
 # リレキト システム概要書
 
-最終更新: 2026-05-08
+最終更新: 2026-10-28
 
 ---
 
@@ -19,11 +19,11 @@
 ```
 [無料履歴書ツール] ← SNS・インフルエンサー集客
         ↓
-   PDFダウンロード時に電話番号・メアド＋同意取得
+   診断 → 自己PRづくり → 出口を選ぶ
+        ├ 出口B：自分で完成（ダウンロード時に連絡先＋同意取得 → users / resumes）
+        └ 出口A：プロと一緒に仕上げる（面談申し込み＋同意 → leads、kanata へ通知メール）
         ↓
-   求職者リスト構築（電話番号・メアド・診断タイプ）
-        ↓
-[B2B] 有料職業紹介許可を持つ提携先企業に求職者を紹介
+[B2B] 有料職業紹介許可を持つ提携先企業に求職者を紹介（面談課金）
 ```
 
 ---
@@ -32,11 +32,12 @@
 
 | レイヤー | 技術 |
 |---------|------|
-| フレームワーク | Next.js 16.2.5（App Router、Turbopack） |
+| フレームワーク | Next.js 16.4.2（App Router、Turbopack） |
 | 言語 | TypeScript |
 | スタイリング | Tailwind CSS |
 | PDF生成 | @react-pdf/renderer（ブラウザ側レンダリング） |
-| AI | @ai-sdk/anthropic + Claude Haiku 4.5（自己PRブラッシュアップ） |
+| AI | @ai-sdk/anthropic + Claude Haiku 4.5（自己PR・職務要約の生成） |
+| メール | Resend（面談申し込みの通知。HTTP API を fetch で呼ぶ） |
 | DB | Supabase（PostgreSQL、ap-northeast-1） |
 | ホスティング | Vercel |
 | フォント | Sawarabi Mincho（PDF日本語用） |
@@ -48,54 +49,73 @@
 ```
 src/
 ├── app/
-│   ├── page.tsx                  # メインページ（4ステップフロー制御）
+│   ├── page.tsx                  # メインページ（画面の切り替えと途中経過の保存）
 │   ├── layout.tsx                # ルートレイアウト
 │   ├── privacy/page.tsx          # プライバシーポリシー
 │   ├── terms/page.tsx            # 利用規約
+│   ├── partners/                 # 提携先一覧
 │   └── api/
-│       ├── brushup-pr/route.ts   # 自己PRブラッシュアップ（Claude API）
-│       └── register/route.ts     # ユーザー登録・同意保存
+│       ├── self-pr/route.ts      # 自由回答から自己PRを作る（Claude API）
+│       ├── career-summary/route.ts # 職務要約を作る（Claude API）
+│       ├── leads/route.ts        # 面談申し込みの保存＋通知メール（出口A）
+│       └── register/route.ts     # ユーザー登録・同意保存（出口Bのダウンロード時）
 ├── components/
 │   ├── ResumePDFDownload.tsx     # PDF生成・ダウンロード＋同意モーダル
+│   ├── CareerSheetPDF.tsx        # 職務経歴書PDF
 │   └── steps/
-│       ├── Step1BasicInfo.tsx    # 基本情報入力
-│       ├── Step2Diagnosis.tsx    # 自己診断（10問）
-│       ├── Step3Result.tsx       # 診断結果＋求人表示
-│       └── Step4Resume.tsx       # 履歴書プレビュー＋自己PR
+│       ├── Step2Diagnosis.tsx    # 診断
+│       ├── Step3Result.tsx       # 診断結果
+│       ├── PRStep.tsx            # 自己PRづくり（自由回答3問）
+│       ├── ExitChoice.tsx        # 2つの出口の選択
+│       ├── LeadForm.tsx          # 出口A：面談申し込みフォーム
+│       ├── Step1BasicInfo.tsx    # 出口B：基本情報入力
+│       ├── CareerInput.tsx       # 出口B：職務経歴の入力
+│       └── Step4Resume.tsx       # 出口B：プレビュー＋ダウンロード
 ├── data/
-│   ├── site.ts                   # ブランド名・文言・提携先名（SITE, PARTNER_READY）
+│   ├── site.ts / partners.ts     # ブランド名・文言／提携先（PARTNERS, PARTNER_READY）
 │   ├── types.ts                  # 診断タイプ定義
 │   ├── questions.ts / scoring.ts # 診断の質問・配点
+│   ├── experience.ts             # 経験を聞く質問
 │   └── jobs.ts                   # 求人例データ
 ├── lib/
 │   ├── supabase.ts               # Supabase admin クライアント（サーバー専用）
-│   └── rate-limit.ts             # レート制限（インメモリ）
+│   ├── rate-limit.ts             # レート制限
+│   ├── flow-storage.ts           # 途中経過のブラウザ保存（localStorage）
+│   ├── lead.ts                   # 面談申し込みの検証・同意文・通知メール
+│   ├── prompts.ts / ai.ts        # AI へのプロンプトと共通処理
+│   └── sanitize.ts               # AI への入力の無害化
 └── types/
     └── index.ts                  # 型定義
+supabase/migrations/              # DB の定義（SQL エディタで手動実行）
 ```
 
 ---
 
-## 4. ユーザーフロー
+## 4. ユーザーフロー（診断先行）
 
 ```
-Step1 基本情報入力
-  └─ 氏名・生年月日・住所・電話番号（必須）・メアド（必須）・学歴・職歴 等
+landing 入口
+  └─ 名前・連絡先は聞かない
 
-Step2 自己診断
-  └─ 10問・三択（A/B/C）→ ルールベースで6タイプ（信頼ビルダー等）に分類
+diagnosis 診断（10問・三択＋経験の質問）
+  └─ ルールベースで6タイプに分類
 
-Step3 診断結果
-  └─ タイプ表示（信頼ビルダー等）＋求人例3件表示（イメージ用ダミー。提携先が確定するまで送客案内は非表示）
+result 診断結果
+  └─ タイプ表示。経験が無い人にも「営業マン、いける！」と伝える
 
-Step4 履歴書プレビュー
-  └─ 自己PRテンプレート表示
-  └─ AIブラッシュアップ（任意・Claude Haiku）
-  └─ PDFダウンロードボタン押下
-       └─ 同意モーダル表示（電話番号・メアドを確認＋同意チェック）
-            └─ 「同意してダウンロード」→ DB保存＋PDF取得
-            └─ 「戻る」→ モーダルを閉じる（ダウンロードなし）
+pr 自己PRづくり
+  └─ 自由回答3問 → /api/self-pr で自己PRを生成（本人の回答に無い数字・実績は入れない）
+
+exit 出口の選択
+  ├─ 出口B：自分で完成
+  │    basic 基本情報 → career 職務経歴（/api/career-summary）→ download
+  │    └─ 同意モーダル →「同意してダウンロード」→ /api/register で保存＋PDF取得
+  └─ 出口A：プロと一緒に仕上げる（PARTNER_READY のときのみ）
+       lead 面談申し込みフォーム＋同意 → /api/leads（leads に保存、kanata へ通知）
+       └─ 完了画面で提携先の LINE を案内
 ```
+
+診断結果・自由回答・自己PRは、出口を選ぶまでブラウザの `localStorage`（`rirekito_flow_v1`）にだけ保存し、サーバーには保存しない（AI 生成のための送信を除く）。
 
 ---
 
@@ -119,6 +139,28 @@ CREATE TABLE resumes (
   data           JSONB NOT NULL,     -- BasicInfo 全項目（写真除く）
   diagnosis_type TEXT,               -- StaffType
   created_at     TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+```sql
+-- 面談の申し込み（出口A）。定義の正本は supabase/migrations/20261028_create_leads.sql
+CREATE TABLE leads (
+  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  display_name      TEXT NOT NULL,      -- 呼ばれたい名前
+  phone             TEXT NOT NULL,
+  contact_method    TEXT NOT NULL,      -- 'phone' | 'line'
+  contact_time      TEXT NOT NULL,      -- つながりやすい時間帯
+  current_job       TEXT NOT NULL,
+  desired_job       TEXT NOT NULL,
+  diagnosis_type    TEXT NOT NULL,
+  free_answers      JSONB NOT NULL,     -- 自己PRづくりの自由回答
+  self_pr           TEXT NOT NULL,
+  consent_text      TEXT NOT NULL,      -- 同意いただいた文面
+  partners_at_consent TEXT[] NOT NULL,  -- 同意時点の提携先名
+  ref_source        TEXT,
+  provided_at       TIMESTAMPTZ,        -- 提携先に渡した日時（kanata が記入）
+  provided_to       TEXT                -- 渡した会社名（kanata が記入）
 );
 ```
 
@@ -151,21 +193,23 @@ CREATE TABLE resumes (
 
 ---
 
-### POST `/api/brushup-pr`
+### POST `/api/self-pr`
 
-自己PRをClaudeでブラッシュアップ。ストリーミングレスポンス。
+自由回答（熱中したこと・仕事での不満・その行動）と診断タイプから自己PRを Claude で作る。旧 `/api/brushup-pr`（自己PRブラッシュアップ）は削除し、これに置き換えた。ストリーミングレスポンス（`text/plain`）。
 
-**Request Body**
-```json
-{
-  "userStrengths": "前職でExcelを使った請求書処理...",
-  "staffType": "信頼ビルダー"
-}
-```
+### POST `/api/career-summary`
 
-**Response**: `text/plain` ストリーム
+職務経歴の入力内容から職務要約を作る（出口B）。本人の入力に無い数字・実績は入れない。
 
-**制限**: IPベースのレート制限（5回/分・10回/時・20回/日）。現状インメモリ実装のため Vercel 再起動でリセットされる。
+### POST `/api/leads`
+
+面談の申し込み（出口A）を `leads` テーブルに保存し、`RESEND_API_KEY` で kanata（info@kanata.careers）へ通知メールを送る。
+
+- 入力は zod で検証する。リクエストには同意画面に表示した提携先名 `shownPartners` を含める。サーバーは現在の提携先と一致しなければ 409 を返す（同意が成立していないため）
+- `PARTNER_READY` が false のときは 403
+- 通知メールの成否にかかわらず、DB に保存できていれば `{ "ok": true }` を返す
+
+**共通の制限**: IPベースのレート制限（`rate-limit.ts`）。Upstash Redis 未設定時はインメモリで、再起動でリセットされる。
 
 ---
 
@@ -177,6 +221,8 @@ CREATE TABLE resumes (
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase プロジェクトURL | 公開可 |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase 公開キー | 公開可（RLS有効のため） |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase 管理キー | **サーバーのみ・要秘匿** |
+| `RESEND_API_KEY` | 面談申し込みの通知メール送信（Resend） | **サーバーのみ・要秘匿** |
+| `LEAD_NOTIFY_FROM` | 通知メールの差出人。Resend で認証済みのドメインのアドレスにする（未設定だと `onboarding@resend.dev` になり、Resend アカウントの持ち主にしか届かない） | サーバーのみ |
 
 ---
 
