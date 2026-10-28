@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2500" height="1686" viewBox="0 0 2500 1686" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, sans-serif">
+  <rect width="2500" height="1686" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="2500" height="839" fill="#2563EB"/>
+  <circle cx="2330" cy="90" r="330" fill="#3B82F6"/>
+  <g transform="translate(150 230)">
+    <rect width="380" height="380" rx="80" fill="#FFFFFF"/>
+    <rect x="70" y="90" width="240" height="160" rx="50" fill="#2563EB"/>
+    <path d="M110 240L95 300L170 250Z" fill="#2563EB"/>
+    <circle cx="140" cy="170" r="16" fill="#fff"/><circle cx="190" cy="170" r="16" fill="#fff"/><circle cx="240" cy="170" r="16" fill="#fff"/>
+  </g>
+  <text x="640" y="350" font-size="128" font-weight="700" fill="#FFFFFF">オンラインで</text>
+  <text x="640" y="510" font-size="128" font-weight="700" fill="#FFFFFF">面接練習・転職相談</text>
+  <rect x="640" y="580" width="250" height="96" rx="48" fill="#FBBF24"/>
+  <text x="765" y="645" font-size="60" font-weight="700" fill="#1E3A5F" text-anchor="middle">無料</text>
+  <text x="930" y="648" font-size="58" fill="#DBEAFE">提携の転職エージェントが担当</text>
+  <text x="2350" y="760" font-size="64" font-weight="700" fill="#FFFFFF" text-anchor="end">予約する ›</text>
+
+  <rect x="0" y="847" width="1246" height="839" fill="#EFF6FF"/>
+  <rect x="1254" y="847" width="1246" height="839" fill="#EFF6FF"/>
+
+  <g transform="translate(518 1000)">
+    <path d="M10 22a22 22 0 0 1 22-22H150L210 60V258a22 22 0 0 1-22 22H32a22 22 0 0 1-22-22Z" fill="#FFFFFF" stroke="#2563EB" stroke-width="16"/>
+    <path d="M150 0V60H210" fill="none" stroke="#2563EB" stroke-width="16" stroke-linejoin="round"/>
+    <path d="M55 110H150M55 160H125" stroke="#93C5FD" stroke-width="16" stroke-linecap="round"/>
+  </g>
+  <text x="623" y="1440" font-size="96" font-weight="700" fill="#1E3A5F" text-anchor="middle">書類を作り直す</text>
+  <text x="623" y="1540" font-size="56" fill="#475569" text-anchor="middle">別の会社向けにもう1枚</text>
+
+  <g transform="translate(1737 1000)">
+    <circle cx="140" cy="140" r="132" fill="#FFFFFF" stroke="#2563EB" stroke-width="16"/>
+    <path d="M95 110a45 45 0 1 1 70 37c-17 11-25 20-25 38" fill="none" stroke="#2563EB" stroke-width="22" stroke-linecap="round"/>
+    <circle cx="140" cy="228" r="14" fill="#2563EB"/>
+  </g>
+  <text x="1877" y="1440" font-size="96" font-weight="700" fill="#1E3A5F" text-anchor="middle">よくある質問</text>
+  <text x="1877" y="1540" font-size="56" fill="#475569" text-anchor="middle">お問い合わせはこちら</text>
+</svg>
