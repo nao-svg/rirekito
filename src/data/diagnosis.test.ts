@@ -10,12 +10,12 @@ const LETTERS = ["A", "B", "C"] as const;
 describe("診断タイプ", () => {
   it("6タイプが決まった順で定義されている", () => {
     expect(STAFF_TYPE_NAMES).toEqual([
-      "信頼ビルダー",
-      "開拓ハンター",
-      "課題ソルバー",
-      "数字ストラテジスト",
-      "寄り添いカウンセラー",
-      "チーム推進エンジン",
+      "コツコツ信頼型",
+      "どんどん行動型",
+      "聞き上手の提案型",
+      "計画・改善型",
+      "寄り添い安心型",
+      "チームまとめ役型",
     ]);
     expect(STAFF_TYPES.map((t) => t.name)).toEqual([...STAFF_TYPE_NAMES]);
   });
@@ -99,8 +99,8 @@ describe("calcDiagnosis", () => {
     expect(calcDiagnosis(answers)).toBe(first);
   });
 
-  it("メインの選択肢だけ選べば、そのタイプになる（課題ソルバー）", () => {
-    // 課題ソルバーが2点になる選択肢：Q1A, Q3B, Q5A, Q7C, Q8C
+  it("メインの選択肢だけ選べば、そのタイプになる（聞き上手の提案型）", () => {
+    // 聞き上手の提案型が2点になる選択肢：Q1A, Q3B, Q5A, Q7C, Q8C
     const answers: DiagnosisAnswer[] = [
       { questionId: 1, answer: "A" },
       { questionId: 3, answer: "B" },
@@ -108,11 +108,11 @@ describe("calcDiagnosis", () => {
       { questionId: 7, answer: "C" },
       { questionId: 8, answer: "C" },
     ];
-    expect(calcDiagnosis(answers)).toBe("課題ソルバー");
+    expect(calcDiagnosis(answers)).toBe("聞き上手の提案型");
   });
 
   it("回答0件でも例外を出さず、先頭のタイプを返す", () => {
-    expect(calcDiagnosis([])).toBe("信頼ビルダー");
+    expect(calcDiagnosis([])).toBe("コツコツ信頼型");
   });
 
   it("想定外の回答値や範囲外の質問番号は無視する", () => {
@@ -122,9 +122,9 @@ describe("calcDiagnosis", () => {
       { questionId: 4, answer: "toString" },
       { questionId: 0, answer: "A" },
       { questionId: 11, answer: "A" },
-      { questionId: 6, answer: "A" }, // 寄り添いカウンセラー2点・信頼ビルダー1点
+      { questionId: 6, answer: "A" }, // 寄り添い安心型2点・コツコツ信頼型1点
     ];
-    expect(calcDiagnosis(answers)).toBe("寄り添いカウンセラー");
+    expect(calcDiagnosis(answers)).toBe("寄り添い安心型");
   });
 });
 

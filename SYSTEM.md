@@ -177,7 +177,7 @@ CREATE TABLE sales_leads (
   "consentPartnerReferral": false,
   "consentMarketing": false,
   "resumeData": { /* BasicInfo */ },
-  "diagnosisType": "信頼ビルダー"
+  "diagnosisType": "コツコツ信頼型"
 }
 ```
 

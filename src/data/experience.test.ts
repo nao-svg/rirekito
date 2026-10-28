@@ -24,17 +24,17 @@ describe("経験の質問", () => {
   });
 
   it("接客経験があれば、コミュニケーション力を理由にする", () => {
-    expect(encouragementReasons({ service: "1年以上", target: "なかった" }, "信頼ビルダー")[0]).toContain("コミュニケーション");
-    expect(encouragementReasons({ service: "1年未満", target: "なかった" }, "信頼ビルダー")[0]).toContain("コミュニケーション");
+    expect(encouragementReasons({ service: "1年以上", target: "なかった" }, "コツコツ信頼型")[0]).toContain("コミュニケーション");
+    expect(encouragementReasons({ service: "1年未満", target: "なかった" }, "コツコツ信頼型")[0]).toContain("コミュニケーション");
   });
 
   it("接客経験がなければ、タイプの強みを理由にする", () => {
-    const t = STAFF_TYPES.find((x) => x.name === "開拓ハンター")!;
-    expect(encouragementReasons({ service: "ない", target: "なかった" }, "開拓ハンター")[0]).toContain(t.traits[0]);
+    const t = STAFF_TYPES.find((x) => x.name === "どんどん行動型")!;
+    expect(encouragementReasons({ service: "ない", target: "なかった" }, "どんどん行動型")[0]).toContain(t.traits[0]);
   });
 
   it("目標があった人には、目標に向かう経験も理由に足す", () => {
-    expect(encouragementReasons({ service: "ない", target: "あった" }, "課題ソルバー").join("")).toContain("目標");
+    expect(encouragementReasons({ service: "ない", target: "あった" }, "聞き上手の提案型").join("")).toContain("目標");
   });
 
   it("isExperienceAnswers は決まった値だけ通す", () => {
