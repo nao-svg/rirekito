@@ -80,7 +80,7 @@ src/
 ├── lib/
 │   ├── supabase.ts               # Supabase admin クライアント（サーバー専用）
 │   ├── rate-limit.ts             # レート制限
-│   ├── flow-storage.ts           # 途中経過のブラウザ保存（localStorage）
+│   ├── flow-storage.ts           # 途中経過のブラウザ保存（sessionStorage）
 │   ├── lead.ts                   # 面談申し込みの検証・同意文・通知メール
 │   ├── prompts.ts / ai.ts        # AI へのプロンプトと共通処理
 │   └── sanitize.ts               # AI への入力の無害化
@@ -115,7 +115,7 @@ exit 出口の選択
        └─ 完了画面で提携先の LINE を案内
 ```
 
-診断結果・自由回答・自己PRは、出口を選ぶまでブラウザの `localStorage`（`rirekito_flow_v1`）にだけ保存し、サーバーには保存しない（AI 生成のための送信を除く）。
+診断結果・自由回答・自己PRは、出口を選ぶまでブラウザの `sessionStorage`（`rirekito_flow_v1`。タブを閉じると消える。流入元 `ref_source` も同じ）にだけ保存し、サーバーには保存しない（AI 生成のための送信を除く）。
 
 ---
 
@@ -209,7 +209,7 @@ CREATE TABLE leads (
 - `PARTNER_READY` が false のときは 403
 - 通知メールの成否にかかわらず、DB に保存できていれば `{ "ok": true }` を返す
 
-**共通の制限**: IPベースのレート制限（`rate-limit.ts`）。Upstash Redis 未設定時はインメモリで、再起動でリセットされる。
+**共通の制限**: IPベースのレート制限（`rate-limit.ts`）。Upstash Redis を設定していればそれを使い、未設定のときはインメモリ（再起動でリセット）。
 
 ---
 
@@ -232,7 +232,7 @@ CREATE TABLE leads (
 |------|------|
 | HTTPセキュリティヘッダー | HSTS・X-Frame-Options・X-Content-Type-Options・Referrer-Policy |
 | AIプロンプトインジェクション対策 | 入力サニタイズ・長さ制限・ホワイトリスト検証 |
-| レート制限 | IPベース（インメモリ）。**本番強化推奨: Upstash Redis** |
+| レート制限 | IPベース。Upstash Redis を設定していればそれを使い、未設定のときはインメモリ（再起動でリセット） |
 | Supabase RLS | service_role 以外からのDB直接アクセスを全拒否 |
 | service_role キー | サーバーサイド（`/api/*`）のみで使用。クライアントバンドルに含まれない |
 
@@ -242,7 +242,7 @@ CREATE TABLE leads (
 
 | 優先度 | 内容 |
 |--------|------|
-| 中 | レート制限の永続化（Upstash Redis）。現状はVercel再起動でリセット |
+| 中 | 本番で Upstash Redis が設定されているか確認（未設定だとインメモリで再起動のたびリセット） |
 | 中 | 求人データがハードコード。提携先決定後に実データへ差し替え |
 | 低 | テスト未整備（Playwright等） |
 | 低 | 監視ツール未導入（Sentry等） |
