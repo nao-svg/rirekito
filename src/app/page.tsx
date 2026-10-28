@@ -59,6 +59,8 @@ const SCREEN_STEP: Partial<Record<Screen, number>> = {
 export default function Home() {
   const [flow, setFlow] = useState<FlowState>(INITIAL_FLOW);
   const [hydrated, setHydrated] = useState(false);
+  // 申し込みフォームの「戻る」の行き先（ダウンロード画面から相談に来た人はそこへ戻す）
+  const [leadBackTo, setLeadBackTo] = useState<Screen>("exit");
   // 連絡先・基本情報は保存しない（再読み込みで消える）
   const [basicInfo, setBasicInfo] = useState<BasicInfo>(DEFAULT_BASIC_INFO);
   // 職務経歴書も保存しない（基本情報と同じ扱い）
@@ -259,6 +261,12 @@ export default function Home() {
             diagnosisResult={diagnosisResult}
             careerSheet={careerSheet}
             onBack={() => goTo("career")}
+            onConsult={(pr) => {
+              // ダウンロード画面で直した自己PRを申し込みに使う（空なら出口画面のものを残す）
+              if (pr.trim()) setFlow((f) => ({ ...f, selfPR: pr }));
+              setLeadBackTo("download");
+              goTo("lead");
+            }}
           />
         )}
         {screen === "pr" && flow.experience && diagnosisResult && (
@@ -278,7 +286,10 @@ export default function Home() {
           <ExitChoice
             selfPR={flow.selfPR}
             onSelfPRChange={(s) => setFlow((f) => ({ ...f, selfPR: s }))}
-            onChooseLead={() => goTo("lead")}
+            onChooseLead={() => {
+              setLeadBackTo("exit");
+              goTo("lead");
+            }}
             onChooseSelf={() => goTo("basic")}
             onRegenerate={() => goTo("pr")}
           />
@@ -288,7 +299,7 @@ export default function Home() {
             diagnosisType={diagnosisResult.type}
             freeAnswers={flow.freeAnswers}
             selfPR={flow.selfPR}
-            onBack={() => goTo("exit")}
+            onBack={() => goTo(leadBackTo)}
           />
         )}
       </div>

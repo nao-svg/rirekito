@@ -37,8 +37,19 @@ export default function ExitChoice({
             自己PRが空です。作り直すか、入力してください。
           </p>
         )}
-        <div className="text-right">
-          <button onClick={onRegenerate} className="text-sm text-blue-600 underline">
+        <div className="flex items-start justify-between gap-3 mt-1">
+          {PARTNER_READY ? (
+            <button
+              onClick={onChooseLead}
+              disabled={isEmpty}
+              className="text-left text-sm text-blue-600 underline disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              うまく直せない？プロに無料で相談 →
+            </button>
+          ) : (
+            <span />
+          )}
+          <button onClick={onRegenerate} className="shrink-0 text-sm text-blue-600 underline">
             作り直す
           </button>
         </div>
