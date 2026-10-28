@@ -13,7 +13,7 @@ export default function PrivacyPage() {
         <header>
           <Link href="/" className="text-sm text-blue-600 hover:underline">← トップに戻る</Link>
           <h1 className="text-2xl font-bold text-gray-900 mt-3">プライバシーポリシー</h1>
-          <p className="text-xs text-gray-500 mt-1">最終更新日:2026年10月20日</p>
+          <p className="text-xs text-gray-500 mt-1">最終更新日:2026年10月28日</p>
         </header>
 
         <section className="space-y-3 text-sm text-gray-700 leading-relaxed">
@@ -45,6 +45,11 @@ export default function PrivacyPage() {
             </li>
             <li>サービス改善のための統計分析</li>
           </ul>
+          <p className="text-gray-600 mt-2">
+            <strong>LINE公式アカウントで取得する情報:</strong>
+            本サービスのLINE公式アカウントでは、LINEの表示名と、トークでお送りいただいた内容（お名前、面接練習・転職相談の希望日程、ご相談内容など）を取得し、
+            お問い合わせへの回答、および提携先が行う面接練習・転職相談の日程調整に利用します。これらはLINE公式アカウントの管理画面（LINEヤフー株式会社のサービス）上に保存されます。
+          </p>
         </section>
 
         <section className="space-y-2 text-sm text-gray-700 leading-relaxed">
@@ -83,6 +88,23 @@ export default function PrivacyPage() {
                   </li>
                   <li>提供する情報: 氏名、電話番号・メールアドレス、履歴書の記載内容（写真を含む）、診断結果、アンケート回答（転職希望時期・雇用形態・希望勤務地）</li>
                   <li>提供の目的: 提供先から営業職の求人紹介を受けるため</li>
+                </ul>
+              ) : (
+                <span className="block pl-4 mt-1">
+                  現時点では提携先は未定です。提携先が決まり次第、本ポリシーを更新のうえ提携先名を明記し、提携先への情報提供を開始する前に改めてご確認いただける機会を設けます。
+                </span>
+              )}
+            </li>
+            <li>
+              <strong>LINEでお申し込みいただいた面接練習・転職相談のための提供:</strong>
+              LINE公式アカウントで面接練習・転職相談をお申し込みいただき、トーク上で提携先への情報提供に同意いただいた場合に限り、以下のとおり提供します。
+              {PARTNER_READY ? (
+                <ul className="list-[circle] list-inside pl-4 mt-1 space-y-1">
+                  <li>
+                    提供先: <Link href="/partners" className="text-blue-600 hover:underline">提携先一覧</Link>に記載の有料職業紹介事業者（現在: {ACTIVE_PARTNERS.map((p) => p.name).join("、")}）
+                  </li>
+                  <li>提供する情報: お名前、LINEのトークでお送りいただいた内容（希望日程・ご相談内容など）</li>
+                  <li>提供の目的: 提供先による面接練習・転職相談の日程調整と実施、および営業職の求人紹介</li>
                 </ul>
               ) : (
                 <span className="block pl-4 mt-1">
