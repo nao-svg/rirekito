@@ -12,11 +12,10 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* 画面は明るい配色だけで作っている。スマホのダークモードで文字だけ白くなり、
+   白い入力欄の中で見えなくなるのを防ぐため、ダークモード用の色は持たない */
+:root {
+  color-scheme: light;
 }
 
 body {

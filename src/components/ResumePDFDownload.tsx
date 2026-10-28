@@ -821,39 +821,52 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, careerSh
               </div>
             </div>
 
-            <div className="space-y-3">
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={consentTerms}
-                  onChange={(e) => setConsentTerms(e.target.checked)}
-                  className="mt-0.5 shrink-0"
-                />
-                <span className="text-xs text-gray-700 leading-relaxed">
-                  <a href="/terms" target="_blank" className="text-blue-600 underline">利用規約</a>・
-                  <a href="/privacy" target="_blank" className="text-blue-600 underline">プライバシーポリシー</a>
-                  に同意する <span className="text-red-500">*必須</span>
-                </span>
-              </label>
-              {PARTNER_READY && (
-                <label className="flex items-start gap-3 cursor-pointer">
+            <div className="space-y-4">
+              {/* リンクをチェック欄の文から離し、チェックしようとしてリンクを踏まないようにする */}
+              <div>
+                <label className="flex items-start gap-3 cursor-pointer py-1">
                   <input
                     type="checkbox"
-                    checked={consentPartner}
-                    onChange={(e) => setConsentPartner(e.target.checked)}
-                    className="mt-0.5 shrink-0"
+                    checked={consentTerms}
+                    onChange={(e) => setConsentTerms(e.target.checked)}
+                    className="mt-0.5 shrink-0 w-5 h-5"
                   />
                   <span className="text-xs text-gray-700 leading-relaxed">
-                    氏名・連絡先・履歴書・職務経歴書の記載内容（写真・自己PRを含む）・診断結果・アンケート回答を、<a href="/partners" target="_blank" className="text-blue-600 underline">提携先一覧</a>に記載の人材紹介会社に提供し、営業職の求人紹介を受けることに同意する（任意）
+                    利用規約・プライバシーポリシーに同意する <span className="text-red-500">*必須</span>
                   </span>
                 </label>
+                <p className="mt-2 ml-8 text-xs text-gray-500">
+                  内容を読む：
+                  <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">利用規約</a>
+                  <span className="mx-2">/</span>
+                  <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">プライバシーポリシー</a>
+                </p>
+              </div>
+              {PARTNER_READY && (
+                <div>
+                  <label className="flex items-start gap-3 cursor-pointer py-1">
+                    <input
+                      type="checkbox"
+                      checked={consentPartner}
+                      onChange={(e) => setConsentPartner(e.target.checked)}
+                      className="mt-0.5 shrink-0 w-5 h-5"
+                    />
+                    <span className="text-xs text-gray-700 leading-relaxed">
+                      氏名・連絡先・履歴書・職務経歴書の記載内容（写真・自己PRを含む）・診断結果・アンケート回答を、提携先一覧に記載の人材紹介会社に提供し、営業職の求人紹介を受けることに同意する（任意）
+                    </span>
+                  </label>
+                  <p className="mt-2 ml-8 text-xs text-gray-500">
+                    内容を読む：
+                    <a href="/partners" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">提携先一覧</a>
+                  </p>
+                </div>
               )}
-              <label className="flex items-start gap-3 cursor-pointer">
+              <label className="flex items-start gap-3 cursor-pointer py-1">
                 <input
                   type="checkbox"
                   checked={consentMarketing}
                   onChange={(e) => setConsentMarketing(e.target.checked)}
-                  className="mt-0.5 shrink-0"
+                  className="mt-0.5 shrink-0 w-5 h-5"
                 />
                 <span className="text-xs text-gray-700 leading-relaxed">
                   転職・キャリアに役立つメールマガジンを受け取る（任意）
