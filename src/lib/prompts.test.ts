@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildSelfPRPrompt, buildCareerSummaryPrompt, NO_FABRICATION_RULE, EXAMPLE_NOT_FACT_RULE, FREE_ANSWER_MAX } from "@/lib/prompts";
+import { buildSelfPRPrompt, buildCareerSummaryPrompt, NO_FABRICATION_RULE, EXAMPLE_NOT_FACT_RULE, FREE_ANSWER_MAX, SHORT_ANSWER_RULE, NO_DURATION_CALC_RULE } from "@/lib/prompts";
 import { STAFF_TYPES } from "@/data/types";
 const base = {
   staffType: "信頼ビルダー" as const,
@@ -30,6 +30,12 @@ describe("buildSelfPRPrompt", () => {
   });
   it("空の回答は「（回答なし）」として渡す", () => {
     expect(buildSelfPRPrompt({ ...base, answers: { ...base.answers, complaint: "", action: "" } })).toContain("（回答なし）");
+  });  it("回答が短ければ短い自己PRでよく、字数埋めのために足さないよう指示する", () => {
+    expect(SHORT_ANSWER_RULE).toBe("回答が短い場合は、短い自己PRでよい。字数を埋めるために、回答に無いエピソード・お客様の言葉・成果を足さない。");
+    const p = buildSelfPRPrompt(base);
+    expect(p).toContain(SHORT_ANSWER_RULE);
+    expect(p).toContain("250字以内（回答が少なければ短くてよい）");
+    expect(p).not.toContain("200〜250字");
   });
 });
 
@@ -40,5 +46,10 @@ describe("buildCareerSummaryPrompt", () => {
     expect(p).toContain("アルバイト・パート");
     expect(p).toContain("新人教育を任された");
     expect(p).toContain("2022年4月〜現在");
+  });
+  it("期間から年数・月数を計算して書かないよう指示する", () => {
+    expect(NO_DURATION_CALC_RULE).toBe("期間から年数や月数を計算して書かない（期間はそのまま使ってよい）。");
+    const p = buildCareerSummaryPrompt({ jobs: [{ start: "2022-04", end: "", workplaceType: "飲食店", employment: "アルバイト・パート", duties: ["接客"], dutiesNote: "", achievement: "" }], skills: [] });
+    expect(p).toContain(NO_DURATION_CALC_RULE);
   });
 });
