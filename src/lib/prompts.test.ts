@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildSelfPRPrompt, NO_FABRICATION_RULE, EXAMPLE_NOT_FACT_RULE, FREE_ANSWER_MAX } from "@/lib/prompts";
+import { buildSelfPRPrompt, buildCareerSummaryPrompt, NO_FABRICATION_RULE, EXAMPLE_NOT_FACT_RULE, FREE_ANSWER_MAX } from "@/lib/prompts";
 import { STAFF_TYPES } from "@/data/types";
 const base = {
   staffType: "信頼ビルダー" as const,
@@ -30,5 +30,15 @@ describe("buildSelfPRPrompt", () => {
   });
   it("空の回答は「（回答なし）」として渡す", () => {
     expect(buildSelfPRPrompt({ ...base, answers: { ...base.answers, complaint: "", action: "" } })).toContain("（回答なし）");
+  });
+});
+
+describe("buildCareerSummaryPrompt", () => {
+  it("数字を作らないルール・アルバイトを正直に書く指示・本人の入力を含む", () => {
+    const p = buildCareerSummaryPrompt({ jobs: [{ start: "2022-04", end: "", workplaceType: "飲食店", employment: "アルバイト・パート", duties: ["接客"], dutiesNote: "", achievement: "新人教育を任された" }], skills: ["接客"] });
+    expect(p).toContain(NO_FABRICATION_RULE);
+    expect(p).toContain("アルバイト・パート");
+    expect(p).toContain("新人教育を任された");
+    expect(p).toContain("2022年4月〜現在");
   });
 });
