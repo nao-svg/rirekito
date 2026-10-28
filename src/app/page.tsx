@@ -11,6 +11,8 @@ import Step1BasicInfo from "@/components/steps/Step1BasicInfo";
 import Step2Diagnosis from "@/components/steps/Step2Diagnosis";
 import Step3Result from "@/components/steps/Step3Result";
 import Step4Resume from "@/components/steps/Step4Resume";
+import PRStep from "@/components/steps/PRStep";
+import ExitChoice from "@/components/steps/ExitChoice";
 
 const DEFAULT_BASIC_INFO: BasicInfo = {
   name: "",
@@ -192,7 +194,29 @@ export default function Home() {
             onBack={() => goTo("basic")}
           />
         )}
-        {(screen === "pr" || screen === "exit" || screen === "lead" || screen === "career") && (
+        {screen === "pr" && flow.experience && diagnosisResult && (
+          <PRStep
+            staffType={diagnosisResult.type}
+            experience={flow.experience}
+            answers={flow.freeAnswers}
+            onAnswersChange={(a) => setFlow((f) => ({ ...f, freeAnswers: a }))}
+            onGenerated={(selfPR) => {
+              setFlow((f) => ({ ...f, selfPR, screen: "exit" }));
+              window.scrollTo({ top: 0, behavior: "auto" });
+            }}
+            onBack={() => goTo("result")}
+          />
+        )}
+        {screen === "exit" && (
+          <ExitChoice
+            selfPR={flow.selfPR}
+            onSelfPRChange={(s) => setFlow((f) => ({ ...f, selfPR: s }))}
+            onChooseLead={() => goTo("lead")}
+            onChooseSelf={() => goTo("basic")}
+            onRegenerate={() => goTo("pr")}
+          />
+        )}
+        {(screen === "lead" || screen === "career") && (
           <div className="text-center py-20 space-y-4">
             <p className="text-lg font-bold text-gray-800">準備中です</p>
             <button
