@@ -58,4 +58,31 @@ export interface DiagnosisResult {
   selfPR: string;
 }
 
-export type Step = 1 | 2 | 3 | 4;
+export type Screen =
+  | "landing"
+  | "diagnosis"
+  | "result"
+  | "pr"
+  | "exit"
+  | "lead"
+  | "basic"
+  | "career"
+  | "download";
+
+export const SCREENS: readonly Screen[] = [
+  "landing",
+  "diagnosis",
+  "result",
+  "pr",
+  "exit",
+  "lead",
+  "basic",
+  "career",
+  "download",
+];
+
+export interface FreeAnswers {
+  passion: string;
+  complaint: string;
+  action: string;
+}
