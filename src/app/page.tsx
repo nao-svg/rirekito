@@ -13,6 +13,8 @@ import Step3Result from "@/components/steps/Step3Result";
 import Step4Resume from "@/components/steps/Step4Resume";
 import PRStep from "@/components/steps/PRStep";
 import ExitChoice from "@/components/steps/ExitChoice";
+import LeadForm from "@/components/steps/LeadForm";
+import { PARTNER_READY } from "@/data/partners";
 import CareerInput from "@/components/steps/CareerInput";
 import { ACHIEVEMENT_MAX, EMPTY_JOB, type CareerSheet } from "@/data/career";
 
@@ -244,16 +246,13 @@ export default function Home() {
             onRegenerate={() => goTo("pr")}
           />
         )}
-        {screen === "lead" && (
-          <div className="text-center py-20 space-y-4">
-            <p className="text-lg font-bold text-gray-800">準備中です</p>
-            <button
-              onClick={() => goTo("result")}
-              className="text-blue-600 underline text-sm"
-            >
-              ← 結果に戻る
-            </button>
-          </div>
+        {screen === "lead" && diagnosisResult && PARTNER_READY && (
+          <LeadForm
+            diagnosisType={diagnosisResult.type}
+            freeAnswers={flow.freeAnswers}
+            selfPR={flow.selfPR}
+            onBack={() => goTo("exit")}
+          />
         )}
       </div>
     </main>
