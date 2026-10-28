@@ -34,7 +34,7 @@ export default function PrivacyPage() {
           </ul>
           <p className="font-medium text-gray-800">面談を申し込むとき</p>
           <ul className="list-disc list-inside space-y-1 pl-2">
-            <li>お名前・電話番号・連絡方法・つながりやすい時間帯・現在と希望のお仕事</li>
+            <li>氏名・電話番号・連絡方法・つながりやすい時間帯・現在と希望のお仕事</li>
             <li>診断結果のタイプ、自己PRづくりの自由回答（熱中したこと・仕事での不満とその行動）、できあがった自己PR文章</li>
             <li>同意いただいた文面、同意時点の提携先名、流入元（URLの参照元情報）</li>
           </ul>
@@ -146,7 +146,7 @@ export default function PrivacyPage() {
             Supabase のプライバシーポリシーは <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">supabase.com/privacy</a> をご確認ください。
           </p>
           <p>
-            面談の申し込みがあったことを運営者へ知らせるメールは、メール配信サービス（Resend, Inc.、米国の事業者）を通じて送信します。そのため、申し込みをされた方のお名前・電話番号・連絡方法・つながりやすい時間帯などが、運営者への通知を目的として米国にある同社に送信（提供・委託）されます。
+            面談の申し込みがあったことを運営者へ知らせるメールは、メール配信サービス（Resend, Inc.、米国の事業者）を通じて送信します。そのため、申し込みをされた方の氏名・電話番号・連絡方法・つながりやすい時間帯などが、運営者への通知を目的として米国にある同社に送信（提供・委託）されます。
             Resend のプライバシーポリシーは <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">resend.com/legal/privacy-policy</a> をご確認ください。
           </p>
         </section>

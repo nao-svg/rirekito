@@ -23,7 +23,7 @@ interface LeadFormProps {
 type FieldKey = "displayName" | "phone" | "contactMethod" | "contactTime" | "currentJob" | "desiredJob" | "consent";
 
 const FIELD_MESSAGES: Record<FieldKey, string> = {
-  displayName: "お名前を30文字以内で入力してください。",
+  displayName: "氏名を30文字以内で入力してください。",
   phone: "10〜11桁で入力してください。",
   contactMethod: "連絡方法を選んでください。",
   contactTime: "つながりやすい時間帯を選んでください。",
@@ -148,7 +148,7 @@ export default function LeadForm({ diagnosisType, freeAnswers, selfPR, onBack }:
       <div className="space-y-4">
         <div>
           <label htmlFor="lead-name" className="block text-sm font-bold text-gray-800 mb-1">
-            お名前
+            氏名
           </label>
           <input
             id="lead-name"

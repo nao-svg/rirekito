@@ -147,7 +147,7 @@ CREATE TABLE resumes (
 CREATE TABLE sales_leads (
   id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  display_name      TEXT NOT NULL,      -- お名前
+  display_name      TEXT NOT NULL,      -- 氏名
   phone             TEXT NOT NULL,
   contact_method    TEXT NOT NULL,      -- 'phone' | 'line'
   contact_time      TEXT NOT NULL,      -- つながりやすい時間帯

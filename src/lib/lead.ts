@@ -51,7 +51,7 @@ export function buildLeadEmail(lead: LeadInput, leadId: string, partnerNames: st
     "面談希望の申し込みがありました。",
     "",
     `申し込みID: ${leadId}`,
-    `お名前: ${lead.displayName}`,
+    `氏名: ${lead.displayName}`,
     `電話: ${lead.phone}`,
     `連絡方法: ${CONTACT_METHOD_LABELS[lead.contactMethod]}`,
     `つながりやすい時間帯: ${lead.contactTime}`,
