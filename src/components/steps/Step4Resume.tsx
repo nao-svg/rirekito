@@ -26,8 +26,8 @@ interface Props {
 
 export default function Step4Resume({ basicInfo, diagnosisResult, careerSheet, onBack, onConsult }: Props) {
   const typeDef = STAFF_TYPES.find((t) => t.name === diagnosisResult.type)!;
-  // 出口画面で作った自己PRを初期値にする（ここでも直せる）。
-  // タイプの見本文は例のエピソードを含むので、空でも代わりに入れない
+  // 自己PRは本人がここで書く（空でもダウンロードできる）。
+  // タイプの見本文は例のエピソードを含むので、初期値には入れない
   const [selfPR, setSelfPR] = useState(diagnosisResult.selfPR);
 
   const age = basicInfo.birthDate
@@ -157,6 +157,7 @@ export default function Step4Resume({ basicInfo, diagnosisResult, careerSheet, o
             onChange={(e) => setSelfPR(e.target.value)}
             rows={6}
             maxLength={600}
+            placeholder="あなたの強みや、頑張った経験を書いてください（空のままでもダウンロードできます）"
             className="w-full text-sm text-gray-700 leading-relaxed resize-none focus:outline-none"
           />
           {selfPR && (
@@ -169,7 +170,7 @@ export default function Step4Resume({ basicInfo, diagnosisResult, careerSheet, o
       {PARTNER_READY && (
         <div className="rounded-xl bg-blue-50 px-4 py-4 space-y-3">
           <p className="text-sm text-gray-800 leading-relaxed">
-            <span className="font-bold">自己PRや書類を直したい？</span>
+            <span className="font-bold">自己PRや書類、ひとりで書くのは不安？</span>
             <br />
             プロが無料で一緒に仕上げます。求人も一緒に探せます。
           </p>

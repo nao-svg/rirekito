@@ -105,8 +105,10 @@ export function loadFlow(storage: Pick<Storage, "getItem">): FlowState {
     if (typeof o !== "object" || o === null) return INITIAL_FLOW;
     // experienceDraft は後から足した項目なので、無ければ空として扱う（あれば厳しく確認）
     const draft = o.experienceDraft === undefined ? {} : o.experienceDraft;
+    // 自己PRづくりの画面は廃止したので、そこで止まっていた人は次の選択画面から再開する
+    const screen = o.screen === "pr" ? "exit" : o.screen;
     if (
-      !(SCREENS as readonly unknown[]).includes(o.screen) ||
+      !(SCREENS as readonly unknown[]).includes(screen) ||
       !isDiagnosisAnswers(o.diagnosisAnswers) ||
       !(o.experience === null || isExperienceAnswers(o.experience)) ||
       !isExperienceDraft(draft) ||
@@ -116,7 +118,7 @@ export function loadFlow(storage: Pick<Storage, "getItem">): FlowState {
       return INITIAL_FLOW;
     }
     return {
-      screen: o.screen as Screen,
+      screen: screen as Screen,
       diagnosisAnswers: o.diagnosisAnswers,
       experience: o.experience as ExperienceAnswers | null,
       experienceDraft: draft,

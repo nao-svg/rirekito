@@ -42,8 +42,9 @@ describe("通知メール", () => {
     expect(f.mock.calls[0][0]).toBe("https://api.resend.com/emails");
   });
   it("同意文に提携先名が入る", () => expect(leadConsentText(["株式会社BEPRIDE"])).toContain("（株式会社BEPRIDE）"));
-  it("同意文に自己PRづくりの回答も提供すると書く", () =>
-    expect(leadConsentText(["株式会社BEPRIDE"])).toContain("入力した内容（自己PRづくりの回答を含む）・診断結果・自己PRを"));
+  it("同意文に、書いた場合は自己PRも提供すると書く", () =>
+    expect(leadConsentText(["株式会社BEPRIDE"])).toContain("入力した内容・診断結果（自己PRを書いた場合はその文章も）を"));
+  it("自己PRは空でも申し込める", () => expect(leadSchema.safeParse({ ...valid, selfPR: "" }).success).toBe(true));
 });
 describe("通知メールのタイムアウト", () => {
   it("応答が返らなければ中断して failed", async () => {

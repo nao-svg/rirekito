@@ -16,7 +16,6 @@ import {
 interface CareerInputProps {
   value: CareerSheet;
   onChange: (v: CareerSheet) => void;
-  passionHint: string;
   onNext: () => void;
   onBack: () => void;
 }
@@ -43,7 +42,7 @@ function toggle<T>(list: T[], item: T): T[] {
   return list.includes(item) ? list.filter((x) => x !== item) : [...list, item];
 }
 
-export default function CareerInput({ value, onChange, passionHint, onNext, onBack }: CareerInputProps) {
+export default function CareerInput({ value, onChange, onNext, onBack }: CareerInputProps) {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
   const [periodError, setPeriodError] = useState("");
@@ -296,9 +295,6 @@ export default function CareerInput({ value, onChange, passionHint, onNext, onBa
               <span>人数や期間など、数字があれば書いてね</span>
               <span>{job.achievement.length} / {ACHIEVEMENT_MAX}</span>
             </div>
-            {i === 0 && passionHint !== "" && job.achievement === passionHint && (
-              <p className="text-xs text-blue-600 mt-1">※自己PRづくりで答えた「熱中したこと」を入れておきました</p>
-            )}
           </div>
         </fieldset>
       ))}

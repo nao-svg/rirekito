@@ -42,6 +42,9 @@ describe("flow-storage", () => {
     expect(loadFlow(memStorage({ [FLOW_STORAGE_KEY]: "{" }))).toEqual(INITIAL_FLOW);
     expect(loadFlow(memStorage({ [FLOW_STORAGE_KEY]: JSON.stringify({ ...sample, screen: "x" }) }))).toEqual(INITIAL_FLOW);
   });
+  it("廃止した自己PRづくりの画面で止まっていたら、次の選択画面から再開する", () => {
+    expect(loadFlow(memStorage({ [FLOW_STORAGE_KEY]: JSON.stringify({ ...sample, screen: "pr" }) })).screen).toBe("exit");
+  });
   it("保存できない環境でも例外を出さない", () => {
     expect(() => saveFlow({ setItem: () => { throw new Error("quota"); } }, sample)).not.toThrow();
   });

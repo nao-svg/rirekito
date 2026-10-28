@@ -18,12 +18,11 @@ import Step1BasicInfo from "@/components/steps/Step1BasicInfo";
 import Step2Diagnosis from "@/components/steps/Step2Diagnosis";
 import Step3Result from "@/components/steps/Step3Result";
 import Step4Resume from "@/components/steps/Step4Resume";
-import PRStep from "@/components/steps/PRStep";
 import ExitChoice from "@/components/steps/ExitChoice";
 import LeadForm from "@/components/steps/LeadForm";
 import { PARTNER_READY } from "@/data/partners";
 import CareerInput from "@/components/steps/CareerInput";
-import { ACHIEVEMENT_MAX, EMPTY_JOB, type CareerSheet } from "@/data/career";
+import { EMPTY_JOB, type CareerSheet } from "@/data/career";
 import LogoMark from "@/components/LogoMark";
 
 const DEFAULT_BASIC_INFO: BasicInfo = {
@@ -43,17 +42,16 @@ const DEFAULT_BASIC_INFO: BasicInfo = {
   certifications: [{ name: "", year: "", month: "" }],
 };
 
-const STEP_LABELS = ["診断", "結果", "自己PR", "仕上げ"];
+const STEP_LABELS = ["診断", "結果", "仕上げ"];
 
 const SCREEN_STEP: Partial<Record<Screen, number>> = {
   diagnosis: 1,
   result: 2,
-  pr: 3,
   exit: 3,
-  lead: 4,
-  basic: 4,
-  career: 4,
-  download: 4,
+  lead: 3,
+  basic: 3,
+  career: 3,
+  download: 3,
 };
 
 export default function Home() {
@@ -217,7 +215,7 @@ export default function Home() {
           <Step3Result
             answers={flow.diagnosisAnswers}
             experience={flow.experience}
-            onNext={() => goTo("pr")}
+            onNext={() => goTo("exit")}
             onBack={() => goTo("diagnosis")}
           />
         )}
@@ -234,23 +232,13 @@ export default function Home() {
             data={basicInfo}
             onChange={setBasicInfo}
             nextLabel="次へ：職務経歴書へ →"
-            onNext={() => {
-              // 最初の勤務先の「頑張ったこと」が空なら、自己PRづくりの「熱中したこと」を入れておく
-              const passion = flow.freeAnswers.passion.trim();
-              setCareerSheet((c) =>
-                passion && c.jobs[0] && c.jobs[0].achievement === ""
-                  ? { ...c, jobs: [{ ...c.jobs[0], achievement: passion.slice(0, ACHIEVEMENT_MAX) }, ...c.jobs.slice(1)] }
-                  : c,
-              );
-              goTo("career");
-            }}
+            onNext={() => goTo("career")}
           />
         )}
         {screen === "career" && (
           <CareerInput
             value={careerSheet}
             onChange={setCareerSheet}
-            passionHint={flow.freeAnswers.passion.trim().slice(0, ACHIEVEMENT_MAX)}
             onNext={() => goTo("download")}
             onBack={() => goTo("basic")}
           />
@@ -262,36 +250,21 @@ export default function Home() {
             careerSheet={careerSheet}
             onBack={() => goTo("career")}
             onConsult={(pr) => {
-              // ダウンロード画面で直した自己PRを申し込みに使う（空なら出口画面のものを残す）
-              if (pr.trim()) setFlow((f) => ({ ...f, selfPR: pr }));
+              // ダウンロード画面で書いた自己PRを申し込みに添える（空でもよい）
+              setFlow((f) => ({ ...f, selfPR: pr }));
               setLeadBackTo("download");
               goTo("lead");
             }}
           />
         )}
-        {screen === "pr" && flow.experience && diagnosisResult && (
-          <PRStep
-            staffType={diagnosisResult.type}
-            experience={flow.experience}
-            answers={flow.freeAnswers}
-            onAnswersChange={(a) => setFlow((f) => ({ ...f, freeAnswers: a }))}
-            onGenerated={(selfPR) => {
-              setFlow((f) => ({ ...f, selfPR, screen: "exit" }));
-              window.scrollTo({ top: 0, behavior: "auto" });
-            }}
-            onBack={() => goTo("result")}
-          />
-        )}
         {screen === "exit" && (
           <ExitChoice
-            selfPR={flow.selfPR}
-            onSelfPRChange={(s) => setFlow((f) => ({ ...f, selfPR: s }))}
             onChooseLead={() => {
               setLeadBackTo("exit");
               goTo("lead");
             }}
             onChooseSelf={() => goTo("basic")}
-            onRegenerate={() => goTo("pr")}
+            onBack={() => goTo("result")}
           />
         )}
         {screen === "lead" && diagnosisResult && PARTNER_READY && (

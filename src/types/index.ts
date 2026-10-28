@@ -62,7 +62,6 @@ export type Screen =
   | "landing"
   | "diagnosis"
   | "result"
-  | "pr"
   | "exit"
   | "lead"
   | "basic"
@@ -73,7 +72,6 @@ export const SCREENS: readonly Screen[] = [
   "landing",
   "diagnosis",
   "result",
-  "pr",
   "exit",
   "lead",
   "basic",

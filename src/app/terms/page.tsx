@@ -12,7 +12,7 @@ export default function TermsPage() {
         <header>
           <Link href="/" className="text-sm text-blue-600 hover:underline">← トップに戻る</Link>
           <h1 className="text-2xl font-bold text-gray-900 mt-3">利用規約</h1>
-          <p className="text-xs text-gray-500 mt-1">最終更新日：2026年10月20日</p>
+          <p className="text-xs text-gray-500 mt-1">最終更新日：2026年10月28日</p>
         </header>
 
         <section className="space-y-3 text-sm text-gray-700 leading-relaxed">
@@ -59,7 +59,7 @@ export default function TermsPage() {
         <section className="space-y-2 text-sm text-gray-700 leading-relaxed">
           <h2 className="text-lg font-semibold text-gray-900">第5条（生成コンテンツについて）</h2>
           <p>
-            本サービスがAIで作成する自己PR文章および職務要約は、参考情報として提供されるものです。最終的な内容の確認・修正は、ユーザーご自身の責任において行ってください。
+            本サービスがAIで作成する職務要約は、参考情報として提供されるものです。最終的な内容の確認・修正は、ユーザーご自身の責任において行ってください。
           </p>
         </section>
 
