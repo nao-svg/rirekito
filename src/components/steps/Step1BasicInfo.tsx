@@ -7,6 +7,7 @@ interface Props {
   data: BasicInfo;
   onChange: (data: BasicInfo) => void;
   onNext: () => void;
+  nextLabel?: string;
 }
 
 function formatPhone(digits: string): string {
@@ -53,7 +54,7 @@ function cropImage(src: string, zoom: number): Promise<string> {
   });
 }
 
-export default function Step1BasicInfo({ data, onChange, onNext }: Props) {
+export default function Step1BasicInfo({ data, onChange, onNext, nextLabel = "次へ：自己診断へ進む →" }: Props) {
   const [phoneError, setPhoneError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -492,7 +493,7 @@ export default function Step1BasicInfo({ data, onChange, onNext }: Props) {
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             処理中...
           </>
-        ) : "次へ：自己診断へ進む →"}
+        ) : nextLabel}
       </button>
     </div>
   );

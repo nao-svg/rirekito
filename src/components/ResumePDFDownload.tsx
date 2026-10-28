@@ -685,12 +685,6 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, careerSh
     }
   };
 
-  const handleModalSkip = () => {
-    setModalState("hidden");
-    setConsentDone(true);
-    performDownload(pendingTarget);
-  };
-
   if (disabled) {
     return (
       <button

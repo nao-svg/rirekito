@@ -192,6 +192,7 @@ export default function Home() {
           <Step1BasicInfo
             data={basicInfo}
             onChange={setBasicInfo}
+            nextLabel="次へ：職務経歴書へ →"
             onNext={() => {
               // 最初の勤務先の「頑張ったこと」が空なら、自己PRづくりの「熱中したこと」を入れておく
               const passion = flow.freeAnswers.passion.trim();
