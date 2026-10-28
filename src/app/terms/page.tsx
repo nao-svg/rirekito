@@ -59,7 +59,7 @@ export default function TermsPage() {
         <section className="space-y-2 text-sm text-gray-700 leading-relaxed">
           <h2 className="text-lg font-semibold text-gray-900">第5条（生成コンテンツについて）</h2>
           <p>
-            本サービスが提供する自己PR文章のテンプレートおよびAIブラッシュアップによって生成された文章は、参考情報として提供されるものです。最終的な内容の確認・修正は、ユーザーご自身の責任において行ってください。
+            本サービスがAIで作成する自己PR文章および職務要約は、参考情報として提供されるものです。最終的な内容の確認・修正は、ユーザーご自身の責任において行ってください。
           </p>
         </section>
 

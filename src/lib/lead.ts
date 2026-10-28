@@ -42,7 +42,7 @@ export function partnersMatch(shown: string[], active: string[]): boolean {
 }
 
 export function leadConsentText(partnerNames: string[]): string {
-  return `入力した内容・診断結果・自己PRを、提携先一覧に記載の人材紹介会社（${partnerNames.join("、")}）に提供し、連絡を受けることに同意します`;
+  return `入力した内容（自己PRづくりの回答を含む）・診断結果・自己PRを、提携先一覧に記載の人材紹介会社（${partnerNames.join("、")}）に提供し、連絡を受けることに同意します`;
 }
 
 export function buildLeadEmail(lead: LeadInput, leadId: string, partnerNames: string[]): { subject: string; text: string } {

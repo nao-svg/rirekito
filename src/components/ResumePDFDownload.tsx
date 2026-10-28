@@ -843,7 +843,7 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, careerSh
                     className="mt-0.5 shrink-0"
                   />
                   <span className="text-xs text-gray-700 leading-relaxed">
-                    氏名・連絡先・履歴書の記載内容（写真を含む）・診断結果・アンケート回答を、<a href="/partners" target="_blank" className="text-blue-600 underline">提携先一覧</a>に記載の人材紹介会社に提供し、営業職の求人紹介を受けることに同意する（任意）
+                    氏名・連絡先・履歴書・職務経歴書の記載内容（写真・自己PRを含む）・診断結果・アンケート回答を、<a href="/partners" target="_blank" className="text-blue-600 underline">提携先一覧</a>に記載の人材紹介会社に提供し、営業職の求人紹介を受けることに同意する（任意）
                   </span>
                 </label>
               )}
