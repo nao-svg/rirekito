@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { leadSchema, buildLeadEmail, sendLeadNotification, leadConsentText, partnersMatch } from "@/lib/lead";
 const valid = {
   displayName: "なお", phone: "09012345678", contactMethod: "line", contactTime: "平日 夜（18時以降）",
-  currentJob: "飲食店アルバイト", desiredJob: "営業職", consent: true, diagnosisType: "信頼ビルダー",
+  currentJob: "飲食店アルバイト", desiredJob: "営業職", consent: true, diagnosisType: "コツコツ信頼型",
   freeAnswers: { passion: "新人教育", complaint: "", action: "" }, selfPR: "私は自己PR本文です", refSource: null, shownPartners: ["株式会社BEPRIDE"],
 };
 describe("leadSchema", () => {
