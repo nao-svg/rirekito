@@ -96,7 +96,7 @@ resumes:
 ### sales_leads テーブル（面談の申し込み）
 
 - 定義: `supabase/migrations/20261028_create_sales_leads.sql`（Supabase の SQL エディタで実行する）
-- 主な列: 呼ばれたい名前・電話番号・連絡方法（phone/line）・つながりやすい時間帯・現在と希望の仕事・診断タイプ・自由回答（jsonb）・自己PR・同意文面（`consent_text`）・同意時点の提携先名（`partners_at_consent`）・流入元
+- 主な列: お名前・電話番号・連絡方法（phone/line）・つながりやすい時間帯・現在と希望の仕事・診断タイプ・自由回答（jsonb）・自己PR・同意文面（`consent_text`）・同意時点の提携先名（`partners_at_consent`）・流入元
 - `provided_at`（渡した日時）・`provided_to`（渡した会社名）は kanata が手で記入する
 - 注意: 同じ Supabase プロジェクトに、このアプリが作ったものではない `leads` テーブル（氏名・生年月日・住所などの列あり）が元からある。名前がぶつかるため申し込みは `sales_leads` に保存する。`leads` には触らない
 - RLS 有効・ポリシーなし（service_role のみ）

@@ -18,3 +18,5 @@ create table public.sales_leads (
   provided_to text          -- 渡した会社名（kanata が記入）
 );
 alter table public.sales_leads enable row level security; -- ポリシーは作らない（service_role のみ）
+-- 新しい表には自動で権限が付かないため、アプリ（service_role）にだけ読み書きを許可する
+grant select, insert, update on public.sales_leads to service_role;

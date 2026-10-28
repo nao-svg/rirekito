@@ -34,7 +34,7 @@ export default function PrivacyPage() {
           </ul>
           <p className="font-medium text-gray-800">面談を申し込むとき</p>
           <ul className="list-disc list-inside space-y-1 pl-2">
-            <li>呼ばれたい名前・電話番号・連絡方法・つながりやすい時間帯・現在と希望のお仕事</li>
+            <li>お名前・電話番号・連絡方法・つながりやすい時間帯・現在と希望のお仕事</li>
             <li>診断結果のタイプ、自己PRづくりの自由回答（熱中したこと・仕事での不満とその行動）、できあがった自己PR文章</li>
             <li>同意いただいた文面、同意時点の提携先名、流入元（URLの参照元情報）</li>
           </ul>
@@ -98,7 +98,7 @@ export default function PrivacyPage() {
                   <li>
                     提供先: <Link href="/partners" className="text-blue-600 hover:underline">提携先一覧</Link>に記載の有料職業紹介事業者（現在: {ACTIVE_PARTNERS.map((p) => p.name).join("、")}）。各提携先には、その提携開始日以降に同意いただいた方の情報のみを提供します
                   </li>
-                  <li>提供する情報: 氏名または呼ばれたい名前、電話番号・メールアドレス、連絡方法・つながりやすい時間帯、現在と希望のお仕事、履歴書・職務経歴書の記載内容（写真・自己PRを含む）、診断結果、自由回答（自己PRづくりの回答）、自己PR文章、アンケート回答（転職希望時期・雇用形態・希望勤務地）。いずれも、上記(1)(2)のうちご自身が選んだ方法で入力・同意された範囲に限ります</li>
+                  <li>提供する情報: 氏名、電話番号・メールアドレス、連絡方法・つながりやすい時間帯、現在と希望のお仕事、履歴書・職務経歴書の記載内容（写真・自己PRを含む）、診断結果、自由回答（自己PRづくりの回答）、自己PR文章、アンケート回答（転職希望時期・雇用形態・希望勤務地）。いずれも、上記(1)(2)のうちご自身が選んだ方法で入力・同意された範囲に限ります</li>
                   <li>提供の目的: 提供先から営業職の求人紹介を受けるため</li>
                 </ul>
               ) : (
@@ -124,7 +124,7 @@ export default function PrivacyPage() {
             Supabase のプライバシーポリシーは <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">supabase.com/privacy</a> をご確認ください。
           </p>
           <p>
-            面談の申し込みがあったことを運営者へ知らせるメールは、メール配信サービス（Resend, Inc.、米国の事業者）を通じて送信します。そのため、申し込みをされた方の呼ばれたい名前・電話番号・連絡方法・つながりやすい時間帯などが、運営者への通知を目的として米国にある同社に送信（提供・委託）されます。
+            面談の申し込みがあったことを運営者へ知らせるメールは、メール配信サービス（Resend, Inc.、米国の事業者）を通じて送信します。そのため、申し込みをされた方のお名前・電話番号・連絡方法・つながりやすい時間帯などが、運営者への通知を目的として米国にある同社に送信（提供・委託）されます。
             Resend のプライバシーポリシーは <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">resend.com/legal/privacy-policy</a> をご確認ください。
           </p>
         </section>
