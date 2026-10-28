@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { FreeAnswers, StaffType } from "@/types";
 import { ACTIVE_PARTNERS } from "@/data/partners";
+import { safeSessionStorage } from "@/lib/flow-storage";
 import {
   CONTACT_METHODS,
   CONTACT_METHOD_LABELS,
@@ -66,7 +67,7 @@ export default function LeadForm({ diagnosisType, freeAnswers, selfPR, onBack }:
       diagnosisType,
       freeAnswers,
       selfPR,
-      refSource: sessionStorage.getItem("ref_source"),
+      refSource: safeSessionStorage()?.getItem("ref_source") ?? null,
       shownPartners: partnerNames,
     };
     const parsed = leadSchema.safeParse(payload);

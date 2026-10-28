@@ -6,13 +6,44 @@ import { QUESTIONS } from "@/data/questions";
 import { EXPERIENCE_QUESTIONS, isExperienceAnswers, type ExperienceAnswers } from "@/data/experience";
 
 interface Props {
+  // 途中まで答えた内容（結果画面から戻ったとき・再読み込みしたときに復元する）
+  initialAnswers: DiagnosisAnswer[];
+  initialExperience: Partial<ExperienceAnswers>;
+  // 1問選ぶたびに親へ知らせる（親が保存する）
+  onAnswersChange: (answers: DiagnosisAnswer[]) => void;
+  onExperienceChange: (experience: Partial<ExperienceAnswers>) => void;
   onNext: (answers: DiagnosisAnswer[], experience: ExperienceAnswers) => void;
   onBack: () => void;
 }
 
-export default function Step2Diagnosis({ onNext, onBack }: Props) {
-  const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [expAnswers, setExpAnswers] = useState<Partial<ExperienceAnswers>>({});
+const VALID_QUESTION_IDS = new Set(QUESTIONS.map((q) => q.id));
+
+function toRecord(list: DiagnosisAnswer[]): Record<number, string> {
+  const rec: Record<number, string> = {};
+  for (const a of list) {
+    const q = QUESTIONS.find((x) => x.id === a.questionId);
+    // 今の質問・選択肢に無い答えは捨てる（質問を変えたあとの古い保存データ対策）
+    if (q && q.options.some((o) => o.value === a.answer)) rec[a.questionId] = a.answer;
+  }
+  return rec;
+}
+
+function toList(rec: Record<number, string>): DiagnosisAnswer[] {
+  return Object.entries(rec)
+    .filter(([id]) => VALID_QUESTION_IDS.has(Number(id)))
+    .map(([id, answer]) => ({ questionId: Number(id), answer }));
+}
+
+export default function Step2Diagnosis({
+  initialAnswers,
+  initialExperience,
+  onAnswersChange,
+  onExperienceChange,
+  onNext,
+  onBack,
+}: Props) {
+  const [answers, setAnswers] = useState<Record<number, string>>(() => toRecord(initialAnswers));
+  const [expAnswers, setExpAnswers] = useState<Partial<ExperienceAnswers>>(() => ({ ...initialExperience }));
   const [isNavigating, setIsNavigating] = useState(false);
 
   // 診断ページに遷移したら最上部にスクロール
@@ -20,18 +51,24 @@ export default function Step2Diagnosis({ onNext, onBack }: Props) {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
-  const setAnswer = (questionId: number, value: string) =>
-    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+  const setAnswer = (questionId: number, value: string) => {
+    const next = { ...answers, [questionId]: value };
+    setAnswers(next);
+    onAnswersChange(toList(next));
+  };
+
+  const setExperience = (key: keyof ExperienceAnswers, value: string) => {
+    const next = { ...expAnswers, [key]: value } as Partial<ExperienceAnswers>;
+    setExpAnswers(next);
+    onExperienceChange(next);
+  };
 
   const total = QUESTIONS.length + EXPERIENCE_QUESTIONS.length;
   const answeredCount = Object.keys(answers).length + Object.keys(expAnswers).length;
   const allAnswered = answeredCount === total;
 
   const handleNext = () => {
-    const result: DiagnosisAnswer[] = Object.entries(answers).map(([id, answer]) => ({
-      questionId: Number(id),
-      answer,
-    }));
+    const result = toList(answers);
     // 経験の答えは採点には渡さない（結果画面の励ましの文にだけ使う）
     if (isExperienceAnswers(expAnswers)) onNext(result, expAnswers);
   };
@@ -115,7 +152,7 @@ export default function Step2Diagnosis({ onNext, onBack }: Props) {
                     name={`exp-${q.key}`}
                     value={opt}
                     checked={expAnswers[q.key] === opt}
-                    onChange={() => setExpAnswers((prev) => ({ ...prev, [q.key]: opt }))}
+                    onChange={() => setExperience(q.key, opt)}
                     className="mt-0.5 accent-blue-600 shrink-0"
                   />
                   <span className="text-sm text-gray-700">{opt}</span>

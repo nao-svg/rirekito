@@ -15,6 +15,7 @@ import { BasicInfo, DiagnosisResult } from "@/types";
 import type { CareerSheet } from "@/data/career";
 import { PARTNER_READY } from "@/data/partners";
 import { PDF_FONT_FAMILY } from "@/lib/pdf-fonts";
+import { safeSessionStorage } from "@/lib/flow-storage";
 import { CareerSheetDocument } from "@/components/CareerSheetPDF";
 
 const BORDER = "1px solid #000";
@@ -665,7 +666,7 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, careerSh
     // /api/register は1回だけ送る
     if ((basicInfo.phone || basicInfo.email) && !registeredRef.current) {
       registeredRef.current = true;
-      const refSource = sessionStorage.getItem("ref_source") || null;
+      const refSource = safeSessionStorage()?.getItem("ref_source") || null;
       fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

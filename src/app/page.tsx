@@ -6,7 +6,14 @@ import { SITE } from "@/data/site";
 import { BasicInfo, DiagnosisResult, Screen } from "@/types";
 import { STAFF_TYPES } from "@/data/types";
 import { calcDiagnosis } from "@/data/scoring";
-import { INITIAL_FLOW, loadFlow, saveFlow, type FlowState } from "@/lib/flow-storage";
+import {
+  INITIAL_FLOW,
+  loadFlow,
+  resolveRestoredFlow,
+  safeSessionStorage,
+  saveFlow,
+  type FlowState,
+} from "@/lib/flow-storage";
 import Step1BasicInfo from "@/components/steps/Step1BasicInfo";
 import Step2Diagnosis from "@/components/steps/Step2Diagnosis";
 import Step3Result from "@/components/steps/Step3Result";
@@ -60,26 +67,32 @@ export default function Home() {
     skills: [],
   });
 
+  // 再読み込みで基本情報・職務経歴書が消えたことを、基本情報の画面で1回だけ知らせる
+  const [inputLostNotice, setInputLostNotice] = useState(false);
+
   // 初回マウント時に途中経過を復元し、?ref= を保存
   useEffect(() => {
-    const restored = loadFlow(sessionStorage);
-    // 結果以降の画面なのに診断データが無い場合は入口に戻す
-    const needsData = restored.screen !== "landing" && restored.screen !== "diagnosis";
-    const broken =
-      needsData && (restored.diagnosisAnswers.length === 0 || restored.experience === null);
+    const storage = safeSessionStorage();
+    const { flow: resumed, personalInputLost } = resolveRestoredFlow(
+      storage ? loadFlow(storage) : INITIAL_FLOW,
+    );
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setFlow(broken ? INITIAL_FLOW : restored);
+    setFlow(resumed);
+    setInputLostNotice(personalInputLost);
     setHydrated(true);
     const params = new URLSearchParams(window.location.search);
     const ref = params.get("ref");
-    if (ref) sessionStorage.setItem("ref_source", ref);
+    if (ref) storage?.setItem("ref_source", ref);
   }, []);
 
   useEffect(() => {
-    if (hydrated) saveFlow(sessionStorage, flow);
+    if (!hydrated) return;
+    const storage = safeSessionStorage();
+    if (storage) saveFlow(storage, flow);
   }, [flow, hydrated]);
 
   const goTo = (screen: Screen) => {
+    setInputLostNotice(false);
     setFlow((f) => ({ ...f, screen }));
     window.scrollTo({ top: 0, behavior: "auto" });
   };
@@ -175,8 +188,19 @@ export default function Home() {
       <div className="max-w-xl mx-auto px-4 py-8">
         {screen === "diagnosis" && (
           <Step2Diagnosis
+            initialAnswers={flow.diagnosisAnswers}
+            // 途中の選択（experienceDraft）を優先。古い保存データで空なら確定済みの答えを使う
+            initialExperience={{ ...(flow.experience ?? {}), ...flow.experienceDraft }}
+            onAnswersChange={(answers) => setFlow((f) => ({ ...f, diagnosisAnswers: answers }))}
+            onExperienceChange={(draft) => setFlow((f) => ({ ...f, experienceDraft: draft }))}
             onNext={(answers, experience) => {
-              setFlow((f) => ({ ...f, diagnosisAnswers: answers, experience, screen: "result" }));
+              setFlow((f) => ({
+                ...f,
+                diagnosisAnswers: answers,
+                experience,
+                experienceDraft: experience,
+                screen: "result",
+              }));
               window.scrollTo({ top: 0, behavior: "auto" });
             }}
             onBack={() => goTo("landing")}
@@ -189,6 +213,14 @@ export default function Home() {
             onNext={() => goTo("pr")}
             onBack={() => goTo("diagnosis")}
           />
+        )}
+        {screen === "basic" && inputLostNotice && (
+          <p
+            role="status"
+            className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900"
+          >
+            安全のため、氏名などの入力内容は保存していません。お手数ですが、もう一度入力してください。
+          </p>
         )}
         {screen === "basic" && (
           <Step1BasicInfo
