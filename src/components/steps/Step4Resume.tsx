@@ -24,8 +24,9 @@ interface Props {
 
 export default function Step4Resume({ basicInfo, diagnosisResult, careerSheet, onBack }: Props) {
   const typeDef = STAFF_TYPES.find((t) => t.name === diagnosisResult.type)!;
-  // 出口画面で作った自己PRを初期値にする（ここでも直せる）
-  const [selfPR, setSelfPR] = useState(diagnosisResult.selfPR || typeDef.selfPR);
+  // 出口画面で作った自己PRを初期値にする（ここでも直せる）。
+  // タイプの見本文は例のエピソードを含むので、空でも代わりに入れない
+  const [selfPR, setSelfPR] = useState(diagnosisResult.selfPR);
 
   const age = basicInfo.birthDate
     ? Math.floor(
@@ -153,6 +154,7 @@ export default function Step4Resume({ basicInfo, diagnosisResult, careerSheet, o
             value={selfPR}
             onChange={(e) => setSelfPR(e.target.value)}
             rows={6}
+            maxLength={600}
             className="w-full text-sm text-gray-700 leading-relaxed resize-none focus:outline-none"
           />
           {selfPR && (
