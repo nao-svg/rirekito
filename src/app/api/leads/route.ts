@@ -4,7 +4,7 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { jsonError, rateLimitedResponse } from "@/lib/ai";
 import { ACTIVE_PARTNERS, PARTNER_READY } from "@/data/partners";
 import { SITE } from "@/data/site";
-import { leadSchema, leadConsentText, sendLeadNotification } from "@/lib/lead";
+import { leadSchema, leadConsentText, partnersMatch, sendLeadNotification } from "@/lib/lead";
 
 export async function POST(req: NextRequest) {
   const rl = await rateLimit(getClientIp(req), "lead");
@@ -23,6 +23,10 @@ export async function POST(req: NextRequest) {
   const lead = parsed.data;
 
   const partnerNames = ACTIVE_PARTNERS.map((p) => p.name);
+  // 同意画面で見せた提携先と今の提携先が違うなら、同意が成立していないので受け付けない
+  if (!partnersMatch(lead.shownPartners, partnerNames)) {
+    return jsonError(409, "提携先の情報が更新されました。ページを再読み込みしてからお申し込みください。");
+  }
   const { data, error } = await supabaseAdmin
     .from("leads")
     .insert({

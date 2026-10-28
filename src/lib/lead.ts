@@ -21,7 +21,7 @@ const freeAnswer = z.string().trim().max(FREE_ANSWER_MAX);
 
 export const leadSchema = z.object({
   displayName: trimmed(30),
-  phone: z.string().transform(normalizePhone).pipe(z.string().regex(/^\d{10,11}$/)),
+  phone: z.string().max(30).transform(normalizePhone).pipe(z.string().regex(/^\d{10,11}$/)),
   contactMethod: z.enum(CONTACT_METHODS),
   contactTime: z.enum(CONTACT_TIMES),
   currentJob: trimmed(50),
@@ -31,9 +31,15 @@ export const leadSchema = z.object({
   freeAnswers: z.object({ passion: freeAnswer, complaint: freeAnswer, action: freeAnswer }),
   selfPR: z.string().trim().min(1).max(600),
   refSource: z.string().trim().max(100).nullable(),
+  shownPartners: z.array(z.string().max(100)).max(10), // 同意画面に表示した提携先名
 });
 
 export type LeadInput = z.output<typeof leadSchema>;
+
+// 同意画面に表示した提携先が、現在の提携先と同じ（順序も同じ）か
+export function partnersMatch(shown: string[], active: string[]): boolean {
+  return shown.length === active.length && shown.every((n, i) => n === active[i]);
+}
 
 export function leadConsentText(partnerNames: string[]): string {
   return `入力した内容・診断結果・自己PRを、提携先一覧に記載の人材紹介会社（${partnerNames.join("、")}）に提供し、連絡を受けることに同意します`;
@@ -67,8 +73,9 @@ export async function sendLeadNotification(args: {
   from: string;
   to: string;
   fetchImpl?: typeof fetch;
+  timeoutMs?: number;
 }): Promise<"sent" | "skipped" | "failed"> {
-  const { lead, leadId, partnerNames, apiKey, from, to, fetchImpl = fetch } = args;
+  const { lead, leadId, partnerNames, apiKey, from, to, fetchImpl = fetch, timeoutMs = 5000 } = args;
   if (!apiKey) return "skipped";
   try {
     const { subject, text } = buildLeadEmail(lead, leadId, partnerNames);
@@ -76,6 +83,7 @@ export async function sendLeadNotification(args: {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({ from, to: [to], subject, text }),
+      signal: AbortSignal.timeout(timeoutMs),
     });
     if (!res.ok) {
       console.error("lead notification failed: status", res.status, "lead", leadId);

@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
-import { leadSchema, buildLeadEmail, sendLeadNotification, leadConsentText } from "@/lib/lead";
+import { leadSchema, buildLeadEmail, sendLeadNotification, leadConsentText, partnersMatch } from "@/lib/lead";
 const valid = {
   displayName: "なお", phone: "09012345678", contactMethod: "line", contactTime: "平日 夜（18時以降）",
   currentJob: "飲食店アルバイト", desiredJob: "営業職", consent: true, diagnosisType: "信頼ビルダー",
-  freeAnswers: { passion: "新人教育", complaint: "", action: "" }, selfPR: "私は自己PR本文です", refSource: null,
+  freeAnswers: { passion: "新人教育", complaint: "", action: "" }, selfPR: "私は自己PR本文です", refSource: null, shownPartners: ["株式会社BEPRIDE"],
 };
 describe("leadSchema", () => {
   it("全角・ハイフン入りの電話を数字だけにして通す", () => {
@@ -42,4 +42,21 @@ describe("通知メール", () => {
     expect(f.mock.calls[0][0]).toBe("https://api.resend.com/emails");
   });
   it("同意文に提携先名が入る", () => expect(leadConsentText(["株式会社BEPRIDE"])).toContain("（株式会社BEPRIDE）"));
+});
+describe("通知メールのタイムアウト", () => {
+  it("応答が返らなければ中断して failed", async () => {
+    const lead = leadSchema.parse(valid);
+    const hang = vi.fn((_u: unknown, init?: RequestInit) => new Promise<Response>((_, rej) => {
+      init?.signal?.addEventListener("abort", () => rej(new Error("aborted")));
+    }));
+    expect(await sendLeadNotification({ lead, leadId: "x", partnerNames: [], apiKey: "k", from: "a", to: "b", fetchImpl: hang as unknown as typeof fetch, timeoutMs: 20 })).toBe("failed");
+  });
+});
+describe("partnersMatch", () => {
+  it("同じ並びだけ true", () => {
+    expect(partnersMatch(["A", "B"], ["A", "B"])).toBe(true);
+    expect(partnersMatch(["B", "A"], ["A", "B"])).toBe(false);
+    expect(partnersMatch(["A", "B", "C"], ["A", "B"])).toBe(false);
+    expect(partnersMatch(["A"], ["A", "B"])).toBe(false);
+  });
 });
