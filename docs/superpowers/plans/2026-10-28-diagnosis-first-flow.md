@@ -493,7 +493,7 @@ describe("buildCareerSummaryPrompt", () => {
 - Create: `src/lib/lead.ts`、Test: `src/lib/lead.test.ts`
 - Create: `supabase/migrations/20261028_create_leads.sql`
 - Create: `src/app/api/leads/route.ts`
-- Modify: `src/data/partners.ts`（`lineUrl?: string` を `Partner` に追加。BEPRIDE の行にはまだ入れない）
+- Modify: `src/data/partners.ts`（`lineUrl?: string` を `Partner` に追加し、BEPRIDE の行に `lineUrl: "https://lin.ee/6kE4RIX"` を入れる）
 - Modify: `.env.local.example`（`RESEND_API_KEY=`、`LEAD_NOTIFY_FROM=` を追記）
 
 **Interfaces:**
@@ -647,7 +647,7 @@ describe("通知メール", () => {
   - 4章：AI に送る内容を「自己PRづくりの自由回答と職務経歴の入力内容」に。「入力内容にお店の名前などが含まれる場合は、そのまま送信されます。」を追加。「氏名・住所・電話番号などは送信されません」は残す。
   - 6章：申し込みの取り消し・削除も info@kanata.careers で受け付けることを明記。
   - 最終更新日は作業日（2026年10月28日）にし、HANDOFF に「本番公開日に合わせて直す」と書く。
-- [ ] **Step 2: HANDOFF.md・SYSTEM.md を更新** — 画面の流れ（診断先行・2つの出口）、`leads` テーブル（SQL ファイルの場所）、環境変数 `RESEND_API_KEY`・`LEAD_NOTIFY_FROM`、申し込みが来たときの運用（メール確認 → BEPRIDE に渡す → `provided_at`・`provided_to` を記入）、BEPRIDE の `lineUrl` が決まったら `partners.ts` に入れること、`/api/brushup-pr` を `/api/self-pr` に置き換えたこと。
+- [ ] **Step 2: HANDOFF.md・SYSTEM.md を更新** — 画面の流れ（診断先行・2つの出口）、`leads` テーブル（SQL ファイルの場所）、環境変数 `RESEND_API_KEY`・`LEAD_NOTIFY_FROM`、申し込みが来たときの運用（メール確認 → BEPRIDE に渡す → `provided_at`・`provided_to` を記入）、`/api/brushup-pr` を `/api/self-pr` に置き換えたこと。
 - [ ] **Step 3: 全体確認** — Run: `npm test && npx tsc --noEmit && npm run build` / Expected: すべて成功
 - [ ] **Step 4: ブラウザで通し確認** — スマホ幅で 入口 → 診断 → 結果 → 自己PR → 出口B（スキップでダウンロード）、出口A（フォームのエラー表示まで）。`/privacy` の表示。スクリーンショットをユーザーに送る。
 - [ ] **Step 5: コミット** — `git commit -m "docs: プライバシーポリシーと引き継ぎ資料を診断先行フローに合わせて更新"`
