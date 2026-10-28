@@ -9,26 +9,20 @@ import {
   StyleSheet,
   PDFViewer,
   BlobProvider,
-  Font,
 } from "@react-pdf/renderer";
 import { useEffect, useRef, useState } from "react";
 import { BasicInfo, DiagnosisResult } from "@/types";
+import type { CareerSheet } from "@/data/career";
 import { PARTNER_READY } from "@/data/partners";
-
-Font.register({
-  family: "SawarabiMincho",
-  fonts: [{ src: "/SawarabiMincho.ttf" }],
-});
-
-// react-pdfのデフォルトハイフネーションを無効化（日本語に「-」が入るのを防ぐ）
-Font.registerHyphenationCallback((word) => [word]);
+import { PDF_FONT_FAMILY } from "@/lib/pdf-fonts";
+import { CareerSheetDocument } from "@/components/CareerSheetPDF";
 
 const BORDER = "1px solid #000";
 const THIN = "1px solid #000";
 
 const s = StyleSheet.create({
   page: {
-    fontFamily: "SawarabiMincho",
+    fontFamily: PDF_FONT_FAMILY,
     fontSize: 9,
     paddingTop: 28,
     paddingBottom: 28,
@@ -250,17 +244,6 @@ function formatPhone(digits: string): string {
 interface Props {
   basicInfo: BasicInfo;
   diagnosisResult: DiagnosisResult;
-}
-
-// 日本語テキストの改行を自然にするため、各文字間にゼロ幅スペースを挿入
-// これによりreact-pdfのテキストエンジンが任意の文字位置で改行でき、
-// ハイフン挿入や不自然な改行を防ぐ
-// ソフトハイフン・各種ハイフン類も除去（AI出力に混入することがある）
-function injectBreakPoints(text: string): string {
-  return text
-    .replace(/[­‐‑‒–—―]/g, "")
-    .split("")
-    .join("​");
 }
 
 // 自己PR枠の6割を満たすフォントサイズを文字数から算出（9〜15ptでクランプ）
@@ -587,13 +570,15 @@ function ResumeDocument({ basicInfo, diagnosisResult }: Props) {
 interface DownloadProps {
   basicInfo: BasicInfo;
   diagnosisResult: DiagnosisResult;
+  careerSheet: CareerSheet;
   disabled?: boolean;
 }
 
 type Platform = "ios" | "android" | "other";
 type ModalState = "hidden" | "showing";
+type DownloadTarget = "resume" | "career";
 
-export default function ResumePDFDownload({ basicInfo, diagnosisResult, disabled }: DownloadProps) {
+export default function ResumePDFDownload({ basicInfo, diagnosisResult, careerSheet, disabled }: DownloadProps) {
   const [showPreview, setShowPreview] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [platform, setPlatform] = useState<Platform>("other");
@@ -607,7 +592,13 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, disabled
   const [consentMarketing, setConsentMarketing] = useState(false);
   const [modalError, setModalError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const blobUrlRef = useRef<string | null>(null);
+  // 同意モーダルは最初の1回だけ（送信またはスキップのあとは直接ダウンロード）
+  const [consentDone, setConsentDone] = useState(false);
+  // モーダルを開いたときに押されたボタン（どちらのPDFか）
+  const [pendingTarget, setPendingTarget] = useState<DownloadTarget>("resume");
+  const resumeUrlRef = useRef<string | null>(null);
+  const careerUrlRef = useRef<string | null>(null);
+  const registeredRef = useRef(false);
 
   // アンケート
   const [jobChangeTiming, setJobChangeTiming] = useState("");
@@ -626,10 +617,16 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, disabled
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  const filename = `履歴書_${basicInfo.name}_${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, "0")}${String(new Date().getDate()).padStart(2, "0")}.pdf`;
+  const today = new Date();
+  const ymd = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`;
+  const filenames: Record<DownloadTarget, string> = {
+    resume: `履歴書_${basicInfo.name}_${ymd}.pdf`,
+    career: `職務経歴書_${basicInfo.name}_${ymd}.pdf`,
+  };
 
-  const performDownload = () => {
-    const url = blobUrlRef.current;
+  const performDownload = (target: DownloadTarget) => {
+    const url = target === "resume" ? resumeUrlRef.current : careerUrlRef.current;
+    const filename = filenames[target];
     if (!url) return;
     if (isLineIAB) {
       // LINE IABはwindow.open(_blank)が封鎖されているため、現在タブでblobを開く
@@ -646,6 +643,15 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, disabled
     }
   };
 
+  const handleDownloadClick = (target: DownloadTarget) => {
+    if (consentDone) {
+      performDownload(target);
+      return;
+    }
+    setPendingTarget(target);
+    setModalState("showing");
+  };
+
   const handleModalSubmit = () => {
     setModalError("");
     if (!consentTerms) {
@@ -654,8 +660,11 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, disabled
     }
     setIsSubmitting(true);
     setModalState("hidden");
-    performDownload();
-    if (basicInfo.phone || basicInfo.email) {
+    setConsentDone(true);
+    performDownload(pendingTarget);
+    // /api/register は1回だけ送る
+    if ((basicInfo.phone || basicInfo.email) && !registeredRef.current) {
+      registeredRef.current = true;
       const refSource = sessionStorage.getItem("ref_source") || null;
       fetch("/api/register", {
         method: "POST",
@@ -665,7 +674,7 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, disabled
           email: basicInfo.email || "",
           consentPartnerReferral: consentPartner,
           consentMarketing,
-          resumeData: basicInfo,
+          resumeData: { ...basicInfo, selfPR: diagnosisResult.selfPR, careerSheet },
           diagnosisType: diagnosisResult.type,
           refSource,
           jobChangeTiming: jobChangeTiming || null,
@@ -678,7 +687,8 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, disabled
 
   const handleModalSkip = () => {
     setModalState("hidden");
-    performDownload();
+    setConsentDone(true);
+    performDownload(pendingTarget);
   };
 
   if (disabled) {
@@ -706,19 +716,42 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, disabled
         onClick={() => setShowPreview(true)}
         className="block w-full border border-blue-600 text-blue-600 py-2.5 rounded-xl font-medium hover:bg-blue-50 transition text-center text-sm"
       >
-        👁 PDFをプレビュー
+        👁 履歴書PDFをプレビュー
       </button>
 
       <BlobProvider document={<ResumeDocument basicInfo={basicInfo} diagnosisResult={diagnosisResult} />}>
         {({ url, loading }) => {
-          blobUrlRef.current = url;
+          resumeUrlRef.current = url;
           return (
             <button
-              onClick={() => setModalState("showing")}
+              onClick={() => handleDownloadClick("resume")}
               disabled={loading}
               className="block w-full bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition text-center disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {loading ? "PDFを生成中..." : "📄 PDFをダウンロード"}
+              {loading ? "PDFを生成中..." : "📄 履歴書PDFをダウンロード"}
+            </button>
+          );
+        }}
+      </BlobProvider>
+
+      <BlobProvider
+        document={
+          <CareerSheetDocument
+            name={basicInfo.name}
+            careerSheet={careerSheet}
+            selfPR={diagnosisResult.selfPR}
+          />
+        }
+      >
+        {({ url, loading }) => {
+          careerUrlRef.current = url;
+          return (
+            <button
+              onClick={() => handleDownloadClick("career")}
+              disabled={loading}
+              className="block w-full bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition text-center disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {loading ? "PDFを生成中..." : "📄 職務経歴書PDFをダウンロード"}
             </button>
           );
         }}
@@ -931,14 +964,14 @@ export default function ResumePDFDownload({ basicInfo, diagnosisResult, disabled
                                     <li><strong>「ダウンロード」</strong>を選択</li>
                                     <li>「Files」アプリの「ダウンロード」フォルダに保存されます</li>
                                   </ol>
-                                  <p className="text-gray-500">※または「📄 PDFをダウンロード」ボタンから直接保存も可能</p>
+                                  <p className="text-gray-500">※または「📄 履歴書PDFをダウンロード」ボタンから直接保存も可能</p>
                                 </>
                               ) : (
                                 <>
                                   <p className="font-semibold text-gray-900">💾 保存方法</p>
                                   <ul className="list-disc list-inside space-y-1.5">
                                     <li>「新しいタブでPDFを開く」後、ブラウザの保存機能を使用</li>
-                                    <li>または「📄 PDFをダウンロード」ボタンで直接保存</li>
+                                    <li>または「📄 履歴書PDFをダウンロード」ボタンで直接保存</li>
                                   </ul>
                                 </>
                               )}

@@ -13,6 +13,8 @@ import Step3Result from "@/components/steps/Step3Result";
 import Step4Resume from "@/components/steps/Step4Resume";
 import PRStep from "@/components/steps/PRStep";
 import ExitChoice from "@/components/steps/ExitChoice";
+import CareerInput from "@/components/steps/CareerInput";
+import { ACHIEVEMENT_MAX, EMPTY_JOB, type CareerSheet } from "@/data/career";
 
 const DEFAULT_BASIC_INFO: BasicInfo = {
   name: "",
@@ -49,6 +51,12 @@ export default function Home() {
   const [hydrated, setHydrated] = useState(false);
   // 連絡先・基本情報は保存しない（再読み込みで消える）
   const [basicInfo, setBasicInfo] = useState<BasicInfo>(DEFAULT_BASIC_INFO);
+  // 職務経歴書も保存しない（基本情報と同じ扱い）
+  const [careerSheet, setCareerSheet] = useState<CareerSheet>({
+    summary: "",
+    jobs: [{ ...EMPTY_JOB }],
+    skills: [],
+  });
 
   // 初回マウント時に途中経過を復元し、?ref= を保存
   useEffect(() => {
@@ -184,14 +192,33 @@ export default function Home() {
           <Step1BasicInfo
             data={basicInfo}
             onChange={setBasicInfo}
+            onNext={() => {
+              // 最初の勤務先の「頑張ったこと」が空なら、自己PRづくりの「熱中したこと」を入れておく
+              const passion = flow.freeAnswers.passion.trim();
+              setCareerSheet((c) =>
+                passion && c.jobs[0] && c.jobs[0].achievement === ""
+                  ? { ...c, jobs: [{ ...c.jobs[0], achievement: passion.slice(0, ACHIEVEMENT_MAX) }, ...c.jobs.slice(1)] }
+                  : c,
+              );
+              goTo("career");
+            }}
+          />
+        )}
+        {screen === "career" && (
+          <CareerInput
+            value={careerSheet}
+            onChange={setCareerSheet}
+            passionHint={flow.freeAnswers.passion.trim().slice(0, ACHIEVEMENT_MAX)}
             onNext={() => goTo("download")}
+            onBack={() => goTo("basic")}
           />
         )}
         {screen === "download" && diagnosisResult && (
           <Step4Resume
             basicInfo={basicInfo}
             diagnosisResult={diagnosisResult}
-            onBack={() => goTo("basic")}
+            careerSheet={careerSheet}
+            onBack={() => goTo("career")}
           />
         )}
         {screen === "pr" && flow.experience && diagnosisResult && (
@@ -216,7 +243,7 @@ export default function Home() {
             onRegenerate={() => goTo("pr")}
           />
         )}
-        {(screen === "lead" || screen === "career") && (
+        {screen === "lead" && (
           <div className="text-center py-20 space-y-4">
             <p className="text-lg font-bold text-gray-800">準備中です</p>
             <button
