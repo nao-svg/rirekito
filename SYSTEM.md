@@ -21,7 +21,7 @@
         ↓
    診断 → 自己PRづくり → 出口を選ぶ
         ├ 出口B：自分で完成（ダウンロード時に連絡先＋同意取得 → users / resumes）
-        └ 出口A：プロと一緒に仕上げる（面談申し込み＋同意 → leads、kanata へ通知メール）
+        └ 出口A：プロと一緒に仕上げる（面談申し込み＋同意 → sales_leads、kanata へ通知メール）
         ↓
 [B2B] 有料職業紹介許可を持つ提携先企業に求職者を紹介（面談課金）
 ```
@@ -143,8 +143,8 @@ CREATE TABLE resumes (
 ```
 
 ```sql
--- 面談の申し込み（出口A）。定義の正本は supabase/migrations/20261028_create_leads.sql
-CREATE TABLE leads (
+-- 面談の申し込み（出口A）。定義の正本は supabase/migrations/20261028_create_sales_leads.sql
+CREATE TABLE sales_leads (
   id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   display_name      TEXT NOT NULL,      -- 呼ばれたい名前
@@ -203,7 +203,7 @@ CREATE TABLE leads (
 
 ### POST `/api/leads`
 
-面談の申し込み（出口A）を `leads` テーブルに保存し、`RESEND_API_KEY` で kanata（info@kanata.careers）へ通知メールを送る。
+面談の申し込み（出口A）を `sales_leads` テーブルに保存し、`RESEND_API_KEY` で kanata（info@kanata.careers）へ通知メールを送る。
 
 - 入力は zod で検証する。リクエストには同意画面に表示した提携先名 `shownPartners` を含める。サーバーは現在の提携先と一致しなければ 409 を返す（同意が成立していないため）
 - `PARTNER_READY` が false のときは 403

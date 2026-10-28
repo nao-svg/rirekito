@@ -60,7 +60,7 @@ export function buildLeadEmail(lead: LeadInput, leadId: string, partnerNames: st
     `診断タイプ: ${lead.diagnosisType}`,
     `提供先候補: ${partnerNames.join("、")}`,
     "",
-    "自由回答と自己PRは Supabase の leads テーブルで確認してください。BEPRIDE に渡したら provided_at と provided_to を記入してください。",
+    "自由回答と自己PRは Supabase の sales_leads テーブルで確認してください。BEPRIDE に渡したら provided_at と provided_to を記入してください。",
   ].join("\n");
   return { subject, text };
 }

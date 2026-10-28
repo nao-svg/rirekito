@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     return jsonError(409, "提携先の情報が更新されました。ページを再読み込みしてからお申し込みください。");
   }
   const { data, error } = await supabaseAdmin
-    .from("leads")
+    .from("sales_leads")
     .insert({
       display_name: lead.displayName,
       phone: lead.phone,

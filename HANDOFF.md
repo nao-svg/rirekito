@@ -93,24 +93,25 @@ resumes:
 
 ---
 
-### leads テーブル（面談の申し込み）
+### sales_leads テーブル（面談の申し込み）
 
-- 定義: `supabase/migrations/20261028_create_leads.sql`（Supabase の SQL エディタで実行する）
+- 定義: `supabase/migrations/20261028_create_sales_leads.sql`（Supabase の SQL エディタで実行する）
 - 主な列: 呼ばれたい名前・電話番号・連絡方法（phone/line）・つながりやすい時間帯・現在と希望の仕事・診断タイプ・自由回答（jsonb）・自己PR・同意文面（`consent_text`）・同意時点の提携先名（`partners_at_consent`）・流入元
 - `provided_at`（渡した日時）・`provided_to`（渡した会社名）は kanata が手で記入する
+- 注意: 同じ Supabase プロジェクトに、このアプリが作ったものではない `leads` テーブル（氏名・生年月日・住所などの列あり）が元からある。名前がぶつかるため申し込みは `sales_leads` に保存する。`leads` には触らない
 - RLS 有効・ポリシーなし（service_role のみ）
 
 ## 面談の申し込みが来たときの運用
 
 1. info@kanata.careers に届く通知メールを確認する
-2. Supabase の `leads` テーブルで内容を確認する（提携先に渡す前に、運営者が内容を確認する約束をプライバシーポリシーに書いている）
+2. Supabase の `sales_leads` テーブルで内容を確認する（提携先に渡す前に、運営者が内容を確認する約束をプライバシーポリシーに書いている）
 3. BEPRIDE に渡す（申し込んだ人には完了画面で BEPRIDE の LINE https://lin.ee/6kE4RIX も案内している。`src/data/partners.ts` に設定済み）
 4. 渡したら `provided_at` と `provided_to` を記入する（第三者提供の記録を兼ねる）
 5. 取り消し・削除の依頼は info@kanata.careers で受け付ける（プライバシーポリシー6章）
 
 ## 本番公開前のチェックリスト（main への push の前に）
 
-- [ ] `supabase/migrations/20261028_create_leads.sql` を Supabase の SQL エディタで実行する
+- [ ] `supabase/migrations/20261028_create_sales_leads.sql` を Supabase の SQL エディタで実行する
 - [ ] `RESEND_API_KEY` を Vercel と `.env.local` に設定する
 - [ ] `LEAD_NOTIFY_FROM` を、Resend で認証（verify）済みのドメインのアドレスに設定する。未設定だと既定の `onboarding@resend.dev` になり、これは Resend アカウントの持ち主にしか届かないため、info@kanata.careers への通知が届かない可能性がある（申し込み自体は DB に保存される）
 - [ ] プライバシーポリシーの最終更新日（`src/app/privacy/page.tsx`）を実際の本番公開日に直す（現在は作業日の 2026年10月28日）
@@ -176,7 +177,7 @@ resumes:
 ### 中
 - Vercel の環境変数を Sensitive 設定にする（ANTHROPIC_API_KEY・SUPABASE_SERVICE_ROLE_KEY）。要確認。
 - `npm run lint` が既存のエラー1件で失敗する（`ResumePDFDownload.tsx` の useEffect 内の setState）
-- `SYSTEM.md` のDB定義に、`users` のアンケート・流入元の列がまだ反映されていない（`leads` と新しい API は反映済み）
+- `SYSTEM.md` のDB定義に、`users` のアンケート・流入元の列がまだ反映されていない（`sales_leads` と新しい API は反映済み）
 
 ### 低
 - E2Eテスト（Playwright）
