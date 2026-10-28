@@ -49,7 +49,9 @@ export function streamPlainText(prompt: string, opts: { maxOutputTokens: number;
         }
         controller.close();
       } catch (e) {
-        console.error(`[${opts.tag}] stream error:`, e);
+        // 中身（応募者の入力を含みうる）を出さないよう、メッセージと状態コードだけ残す
+        const err = e as { message?: string; statusCode?: number };
+        console.error(`[${opts.tag}] stream error:`, { message: err?.message, statusCode: err?.statusCode });
         controller.error(e);
       }
     },

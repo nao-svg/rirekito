@@ -17,7 +17,8 @@ interface RegisterBody {
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  const rl = await rateLimit(ip);
+  // AI の作り直しと同じ枠で数えると、登録が黙って 429 になるので別枠にする
+  const rl = await rateLimit(ip, "register");
   if (!rl.ok) {
     return NextResponse.json({ error: "リクエストが多すぎます。しばらくしてから再度お試しください。" }, { status: 429 });
   }
