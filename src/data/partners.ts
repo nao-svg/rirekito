@@ -3,11 +3,12 @@ export interface Partner {
   name: string;
   licenseNumber: string; // 有料職業紹介事業許可番号
   startDate: string; // 提携開始日（YYYY-MM-DD）。この日より前に同意した人はこの会社に送客しない
+  lineUrl?: string; // 申し込み後に案内する、この会社の LINE 公式アカウントの URL
   endDate?: string; // 提携終了日（YYYY-MM-DD）。終了しても誰がどのリストに同意したか説明できるよう、行は消さない
 }
 
 export const PARTNERS: Partner[] = [
-  { name: "株式会社BEPRIDE", licenseNumber: "14-ユ-302337", startDate: "2026-10-20" },
+  { name: "株式会社BEPRIDE", licenseNumber: "14-ユ-302337", startDate: "2026-10-20", lineUrl: "https://lin.ee/6kE4RIX" },
 ];
 
 export function activePartners(list: Partner[]): Partner[] {

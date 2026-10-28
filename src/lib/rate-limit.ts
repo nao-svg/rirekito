@@ -60,13 +60,15 @@ export type RateLimitResult =
   | { ok: true }
   | { ok: false; retryAfterSec: number; reason: "minute" | "hour" | "day" };
 
-export async function rateLimit(ip: string): Promise<RateLimitResult> {
+// scope を渡すと、AI など他の API とは別に数える（scope なしのキーは従来どおり ip のまま）
+export async function rateLimit(ip: string, scope?: string): Promise<RateLimitResult> {
+  const id = scope ? `${scope}:${ip}` : ip;
   const limiters = createLimiters();
 
   if (!limiters) {
     // フォールバック：インメモリ
     for (const [key, { max, windowMs }] of Object.entries(MEM_LIMITS) as [keyof typeof MEM_LIMITS, { max: number; windowMs: number }][]) {
-      const r = memCheck(memStore[key], ip, max, windowMs);
+      const r = memCheck(memStore[key], id, max, windowMs);
       if (!r.ok) return { ok: false, retryAfterSec: Math.ceil((r.resetAt - Date.now()) / 1000), reason: key };
     }
     return { ok: true };
@@ -74,9 +76,9 @@ export async function rateLimit(ip: string): Promise<RateLimitResult> {
 
   // Upstash Redis
   const [m, h, d] = await Promise.all([
-    limiters.minute.limit(ip),
-    limiters.hour.limit(ip),
-    limiters.day.limit(ip),
+    limiters.minute.limit(id),
+    limiters.hour.limit(id),
+    limiters.day.limit(id),
   ]);
 
   if (!m.success) return { ok: false, retryAfterSec: Math.ceil((m.reset - Date.now()) / 1000), reason: "minute" };
