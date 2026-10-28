@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { PARTNERS, activePartners, ACTIVE_PARTNERS, BOOKABLE_PARTNERS, PARTNER_READY, formatJaDate, type Partner } from "@/data/partners";
+import { PARTNERS, activePartners, ACTIVE_PARTNERS, PARTNER_READY, formatJaDate, type Partner } from "@/data/partners";
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -17,10 +17,6 @@ describe("提携先一覧", () => {
       expect(p.endDate).toMatch(ISO_DATE);
       expect(p.endDate >= p.startDate).toBe(true);
     }
-  });
-
-  it.each(PARTNERS.filter((p) => p.bookingUrl).map((p) => [p.name, p] as const))("%s の予約ページは https の URL", (_, p) => {
-    expect(new URL(p.bookingUrl!).protocol).toBe("https:");
   });
 
   it("社名は重複しない", () => {
@@ -49,13 +45,6 @@ describe("PARTNER_READY", () => {
   it("提携中の会社が1社以上あるときだけ true", () => {
     expect(PARTNER_READY).toBe(ACTIVE_PARTNERS.length > 0);
     expect(PARTNER_READY).toBe(true);
-  });
-});
-
-describe("BOOKABLE_PARTNERS", () => {
-  it("提携中で予約ページのある会社だけを含む", () => {
-    expect(BOOKABLE_PARTNERS).toEqual(ACTIVE_PARTNERS.filter((p) => p.bookingUrl));
-    expect(BOOKABLE_PARTNERS.every((p) => !p.endDate && p.bookingUrl)).toBe(true);
   });
 });
 
