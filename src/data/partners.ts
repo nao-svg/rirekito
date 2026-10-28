@@ -8,7 +8,7 @@ export interface Partner {
 }
 
 export const PARTNERS: Partner[] = [
-  { name: "株式会社BEPRIDE", licenseNumber: "14-ユ-302337", startDate: "2026-10-20" },
+  { name: "株式会社BEPRIDE", licenseNumber: "14-ユ-302337", startDate: "2026-10-20", bookingUrl: "https://calendar.app.google/qY2S45ahd1UrUPzi6" },
 ];
 
 export function activePartners(list: Partner[]): Partner[] {
